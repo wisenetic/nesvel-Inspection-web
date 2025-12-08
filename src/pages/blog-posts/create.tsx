@@ -1,10 +1,10 @@
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "@/core/components/ui/textarea";
 import { useSelect } from "@refinedev/core";
 import { useForm } from "@refinedev/react-hook-form";
 import { useNavigate } from "react-router";
 
-import { CreateView } from "@/components/refine-ui/views/create-view";
-import { Button } from "@/components/ui/button";
+import { CreateView } from "@/core/components/refine-ui/views/create-view";
+import { Button } from "@/core/components/ui/button";
 import {
   Form,
   FormControl,
@@ -12,15 +12,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@/core/components/ui/form";
+import { Input } from "@/core/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/core/components/ui/select";
 
 export const BlogPostCreate = () => {
   const navigate = useNavigate();

@@ -3,12 +3,12 @@ import { useTable } from "@refinedev/react-table";
 import { createColumnHelper } from "@tanstack/react-table";
 import React from "react";
 
-import { DeleteButton } from "@/components/refine-ui/buttons/delete";
-import { EditButton } from "@/components/refine-ui/buttons/edit";
-import { ShowButton } from "@/components/refine-ui/buttons/show";
-import { DataTable } from "@/components/refine-ui/data-table/data-table";
-import { ListView } from "@/components/refine-ui/views/list-view";
-import { Badge } from "@/components/ui/badge";
+import { DeleteButton } from "@/core/components/refine-ui/buttons/delete";
+import { EditButton } from "@/core/components/refine-ui/buttons/edit";
+import { ShowButton } from "@/core/components/refine-ui/buttons/show";
+import { DataTable } from "@/core/components/refine-ui/data-table/data-table";
+import { ListView } from "@/core/components/refine-ui/views/list-view";
+import { Badge } from "@/core/components/ui/badge";
 
 type BlogPost = {
   id: string;

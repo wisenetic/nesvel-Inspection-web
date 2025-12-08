@@ -12,11 +12,11 @@ import dataProvider from "@refinedev/simple-rest";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router";
 import "./App.css";
 import { authProvider } from "./authProvider";
-import { ErrorComponent } from "./components/refine-ui/layout/error-component";
-import { Layout } from "./components/refine-ui/layout/layout";
-import { Toaster } from "./components/refine-ui/notification/toaster";
-import { useNotificationProvider } from "./components/refine-ui/notification/use-notification-provider";
-import { ThemeProvider } from "./components/refine-ui/theme/theme-provider";
+import { ErrorComponent } from "@/core/components/refine-ui/layout/error-component";
+import { Layout } from "@/core/components/refine-ui/layout/layout";
+import { Toaster } from "@/core/components/refine-ui/notification/toaster";
+import { useNotificationProvider } from "@/core/components/refine-ui/notification/use-notification-provider";
+import { ThemeProvider } from "@/core/components/refine-ui/theme/theme-provider";
 import {
   BlogPostCreate,
   BlogPostEdit,

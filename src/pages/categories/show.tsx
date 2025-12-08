@@ -1,13 +1,13 @@
 import { useShow } from "@refinedev/core";
 
-import { ShowView } from "@/components/refine-ui/views/show-view";
+import { ShowView } from "@/core/components/refine-ui/views/show-view";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/core/components/ui/card";
 
 export const CategoryShow = () => {
   const { result: record, query } = useShow({});

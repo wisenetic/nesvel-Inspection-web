@@ -1,8 +1,8 @@
 import { useForm } from "@refinedev/react-hook-form";
 import { useNavigate } from "react-router";
 
-import { CreateView } from "@/components/refine-ui/views/create-view";
-import { Button } from "@/components/ui/button";
+import { CreateView } from "@/core/components/refine-ui/views/create-view";
+import { Button } from "@/core/components/ui/button";
 import {
   Form,
   FormControl,
@@ -10,8 +10,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "@/core/components/ui/form";
+import { Input } from "@/core/components/ui/input";
 
 export const CategoryCreate = () => {
   const navigate = useNavigate();

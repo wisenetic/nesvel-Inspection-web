@@ -1,15 +1,15 @@
 import { useOne, useShow } from "@refinedev/core";
 
-import { ShowView } from "@/components/refine-ui/views/show-view";
-import { Badge } from "@/components/ui/badge";
+import { ShowView } from "@/core/components/refine-ui/views/show-view";
+import { Badge } from "@/core/components/ui/badge";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+} from "@/core/components/ui/card";
+import { Separator } from "@/core/components/ui/separator";
 
 export const BlogPostShow = () => {
   const { result: record, query } = useShow({});
