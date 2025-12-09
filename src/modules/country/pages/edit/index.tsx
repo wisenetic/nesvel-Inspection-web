@@ -1,5 +1,7 @@
-const CountryEditPage = () => {
-  return <h1>Hello list</h1>;
+import React from "react";
+
+const CountryEditPage: React.FC = () => {
+  return <h1>Country edit view</h1>;
 };
 
-export { CountryEditPage };
+export default CountryEditPage;

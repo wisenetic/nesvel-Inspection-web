@@ -1,81 +1,94 @@
 // src/modules/country/country.module.tsx
-
 import type { AppModule } from "@/core/bootstrap/app-module.type";
-import { GlobeIcon } from "lucide-react";
+import { Globe } from "lucide-react";
 
-import { CountryListPage } from "./pages/list";
-import { CountryCreatePage } from "./pages/create";
-import { CountryEditPage } from "./pages/edit";
-import { CountryShowPage } from "./pages/show";
+import CountryListPage from "./pages/list";
+import CountryCreatePage from "./pages/create";
+import CountryEditPage from "./pages/edit";
+import CountryShowPage from "./pages/show";
 
 /**
- * Country Module
- *
- * Exposes:
- * - Refine Resource "countries"
- * - CRUD pages
- * - Sidebar placement under GROUP "Geography"
- * - Permissions for read + manage access
- *
- * This module will appear automatically in DynamicSidebar
- * via useSidebarFromModules(builder) with correct permissions.
+ * This module defines:
+ * - Resource metadata for Refine
+ * - Sidebar grouping + priority
+ * - Routes for Country CRUD
+ * - Presentation settings (modal/drawer/page)
  */
-
 const CountryModule: AppModule = {
-  /** Unique name */
   name: "country",
-
-  /** Human readable label */
   label: "Countries",
-
-  /** Sidebar + layout group */
   group: "Geography",
+  priority: 10,
 
-  /** Sort order */
-  priority: 1,
-
-  /** Hide from system navigation if needed */
-  hidden: false,
-
-  /** Module-level permissions (high-level) */
-  requiredPermissions: ["geo:read"],
-
-  /** Refine Resource Configuration */
   resource: {
     name: "countries",
+    label: "Countries",
+    list: "/countries",
+    create: "/countries/create",
+    edit: "/countries/edit/:id",
+    show: "/countries/show/:id",
 
-    /** Refine pages */
-    list: CountryListPage,
-    create: CountryCreatePage,
-    edit: CountryEditPage,
-    show: CountryShowPage,
-
-    /** Icon for sidebar */
-    icon: GlobeIcon,
-
-    /** Route options used by Refine and sidebar builder */
     meta: {
-      /**
-       * Define permission requirements for CRUD actions.
-       * - geo:read   → view/list/show
-       * - geo:manage → create/edit/delete
-       */
-      requiredPermissions: ["geo:read"],
-    },
-
-    /** Enable/disable resource in UI */
-    options: {
-      hidden: false,
+      labelKey: "countries.title", // used for i18n translate()
+      icon: "Globe", // for dynamic lucide icon loader
     },
   },
 
-  /** Optional routing extensions */
+  /**
+   * Route definitions for refine + route controller.
+   * The ModuleRouteLoader will mount these under the correct path.
+   */
   routes: [
     {
-      path: "/countries/manage",
+      path: "countries",
       element: <CountryListPage />,
     },
+    {
+      path: "countries/create",
+      element: <CountryCreatePage />,
+      presentation: "page",
+    },
+    {
+      path: "countries/edit/:id",
+      element: <CountryEditPage />,
+      presentation: {
+        view: "drawer",
+        side: "right",
+        className: "w-[500px]",
+      },
+    },
+    {
+      path: "countries/show/:id",
+      element: <CountryShowPage />,
+      presentation: {
+        view: "modal",
+        className: "max-w-xl",
+      },
+    },
   ],
+
+  /**
+   * (Optional) Presentation defaults for /r/:resource/edit/:id overlay routes
+   */
+  presentation: {
+    edit: { view: "drawer", side: "right", className: "w-[500px]" },
+    show: { view: "modal", className: "max-w-xl" },
+    create: "page",
+  },
+
+  /**
+   * Optional: For overlay rendering (RouteController)
+   */
+  renderPresentation: ({ mode }) => {
+    switch (mode) {
+      case "modal":
+        return <CountryShowPage />;
+      case "drawer":
+        return <CountryEditPage />;
+      default:
+        return null;
+    }
+  },
 };
 
 export default CountryModule;

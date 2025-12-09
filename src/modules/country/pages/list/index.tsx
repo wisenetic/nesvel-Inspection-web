@@ -1,5 +1,7 @@
-const CountryListPage = () => {
-  return <h1>Hello list</h1>;
+import React from "react";
+
+const CountryListPage: React.FC = () => {
+  return <h1>Country list view</h1>;
 };
 
-export { CountryListPage };
+export default CountryListPage;

@@ -1,5 +1,8 @@
 // src/core/components/shared/sidebar/builder.ts
-import { usePermissions } from "@refinedev/core";
+// NOTE: Permission-based filtering is currently disabled because usePermissions
+// throws when Refine context/options are not initialized in some render paths.
+// When auth/permissions are wired, re-enable this import and logic.
+// import { usePermissions } from "@refinedev/core";
 import type { AppModule } from "@/core/bootstrap/app-module.type";
 import type { SidebarConfig, SidebarItemConfig } from "./sidebar.types";
 
@@ -25,8 +28,9 @@ function hasPermission(
  * while applying permissions and module/resource meta filtering.
  */
 export function useSidebarFromModules(modules: AppModule[]): SidebarConfig {
-  const { data: permData } = usePermissions<{ roles: string[] }>();
-  const userPerms = permData?.roles ?? [];
+  // TODO: integrate real permissions when authProvider + access control are ready.
+  // For now, render all modules/resources and ignore permission filters.
+  const userPerms: string[] = [];
 
   const items: SidebarItemConfig[] = [];
 

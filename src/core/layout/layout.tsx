@@ -6,7 +6,7 @@ import { cn } from "@/core/lib/utils";
 
 import { SidebarWrapper } from "./sidebar/SidebarWrapper";
 import { Header } from "./header/header";
-import { ErrorComponent } from "./error-component";
+//import { ErrorComponent } from "./error-component";
 import { SidebarInset, SidebarProvider } from "@/core/components/ui/sidebar";
 
 type AppLayoutProps = {

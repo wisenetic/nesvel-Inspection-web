@@ -1,5 +1,5 @@
 // src/core/bootstrap.ts
-import type { AppModule } from "@/core/types/app-module.type";
+import type { AppModule } from "@/core/bootstrap/app-module.type";
 import type { IResourceItem } from "@refinedev/core";
 
 /**

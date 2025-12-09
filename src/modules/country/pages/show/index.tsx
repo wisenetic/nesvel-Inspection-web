@@ -1,5 +1,7 @@
-const CountryShowPage = () => {
-  return <h1>Hello show</h1>;
+import React from "react";
+
+const CountryShowPage: React.FC = () => {
+  return <h1>Country detail view</h1>;
 };
 
-export { CountryShowPage };
+export default CountryShowPage;

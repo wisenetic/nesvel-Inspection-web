@@ -15,8 +15,21 @@ import {
 } from "@/core/components/shared/form";
 
 import { bootstrap } from "@/core/bootstrap";
-import { ModuleRouteLoader } from "./module-route-loader";
+import { renderModuleRoutes } from "./module-route-loader";
 import { RouteController } from "./route-controller";
+
+import {
+  BlogPostCreate,
+  BlogPostEdit,
+  BlogPostList,
+  BlogPostShow,
+} from "@/pages/blog-posts";
+import {
+  CategoryCreate,
+  CategoryEdit,
+  CategoryList,
+  CategoryShow,
+} from "@/pages/categories";
 
 export const AppRoutes: React.FC = () => {
   const modules = bootstrap.modules;
@@ -35,16 +48,25 @@ export const AppRoutes: React.FC = () => {
           }
         >
           {/* Redirect root → first usable resource */}
-          <Route index element={<NavigateToResource resource="dashboard" />} />
-
+          {/* <Route index element={<NavigateToResource resource="dashboard" />} /> */}
+          <Route index element={<NavigateToResource resource="blog_posts" />} />
+          <Route path="/blog-posts">
+            <Route index element={<BlogPostList />} />
+            <Route path="create" element={<BlogPostCreate />} />
+            <Route path="edit/:id" element={<BlogPostEdit />} />
+            <Route path="show/:id" element={<BlogPostShow />} />
+          </Route>
+          <Route path="/categories">
+            <Route index element={<CategoryList />} />
+            <Route path="create" element={<CategoryCreate />} />
+            <Route path="edit/:id" element={<CategoryEdit />} />
+            <Route path="show/:id" element={<CategoryShow />} />
+          </Route>
           {/* Module routes */}
-          <ModuleRouteLoader modules={modules} />
-
-          {/* 404 inside authenticated app */}
-          <Route path="*" element={<ErrorComponent />} />
+          {renderModuleRoutes(modules)}
         </Route>
 
-        {/* Public Authentication Routes */}
+        {/* Public Authentication Routes <Login /> <Register /> <ForgotPassword />*/}
         <Route path="/login" element={<SignInForm />} />
         <Route path="/register" element={<SignUpForm />} />
         <Route path="/forgot-password" element={<ForgotPasswordForm />} />

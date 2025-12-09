@@ -1,6 +1,10 @@
 // src/core/bootstrap/app-module.type.ts
 import type { IResourceItem } from "@refinedev/core";
 import type { ReactNode } from "react";
+import type {
+  ModuleRouteConfig,
+  RoutePresentation,
+} from "@/core/routing/route.types";
 
 /**
  * AppModule
@@ -41,6 +45,7 @@ export interface AppModule {
   resource?: IResourceItem & {
     meta?: {
       requiredPermissions?: string[];
+      [key: string]: unknown;
     };
     options?: {
       hidden?: boolean;
@@ -55,8 +60,22 @@ export interface AppModule {
   /**
    * Additional custom routes this module wants to register
    */
-  routes?: Array<{
-    path: string;
-    element: ReactNode;
-  }>;
+  routes?: ModuleRouteConfig[];
+
+  /**
+   * Presentation defaults for overlay routes (used by RouteController)
+   */
+  presentation?: {
+    list?: RoutePresentation;
+    show?: RoutePresentation;
+    edit?: RoutePresentation;
+    create?: RoutePresentation;
+  };
+
+  /**
+   * Optional custom renderer for overlay content (modal/drawer)
+   */
+  renderPresentation?: (ctx: { mode: "page" | "drawer" | "modal" }) =>
+    | ReactNode
+    | null;
 }

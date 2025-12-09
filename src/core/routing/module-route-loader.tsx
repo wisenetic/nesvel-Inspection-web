@@ -5,9 +5,15 @@ import type { AppModule } from "@/core/bootstrap/app-module.type";
 import type { ModuleRouteConfig } from "./route.types";
 import { ErrorComponent } from "@/core/layout/error-component";
 
-export const ModuleRouteLoader: React.FC<{ modules: AppModule[] }> = ({
-  modules,
-}) => {
+/**
+ * Helper that returns a fragment of <Route> elements for all module routes.
+ *
+ * NOTE: This is a plain function, not a React component, so you should use it as
+ * `{renderModuleRoutes(modules)}` inside a <Routes> tree rather than
+ * `<ModuleRouteLoader />`. This satisfies react-router v7's requirement that
+ * all <Routes> children are <Route> or <React.Fragment>.
+ */
+export function renderModuleRoutes(modules: AppModule[]) {
   return (
     <>
       {modules.map((mod) => {
@@ -21,4 +27,4 @@ export const ModuleRouteLoader: React.FC<{ modules: AppModule[] }> = ({
       <Route path="*" element={<ErrorComponent />} />
     </>
   );
-};
+}
