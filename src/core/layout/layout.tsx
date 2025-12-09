@@ -7,6 +7,8 @@ import { cn } from "@/core/lib/utils";
 import { SidebarWrapper } from "./sidebar/SidebarWrapper";
 import { Header } from "./header/header";
 //import { ErrorComponent } from "./error-component";
+
+import { ThemeProvider } from "@/core/providers/theme-provider";
 import { SidebarInset, SidebarProvider } from "@/core/components/ui/sidebar";
 
 type AppLayoutProps = {
@@ -24,8 +26,8 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
   children,
 }) => {
   return (
-    <SidebarProvider>
-      <div className={cn("min-h-screen flex bg-slate-50", className)}>
+    <ThemeProvider>
+      <SidebarProvider iconWidth="5rem">
         {/* Sidebar (left) */}
         <SidebarWrapper />
 
@@ -34,15 +36,15 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
           <div className="flex min-h-screen flex-col">
             <Header />
 
-            <main className="flex-1 p-6 md:p-8">
+            <main className="flex p-6 md:p-8">
               {/* <ErrorBoundary FallbackComponent={ErrorComponent}> */}
               {children ?? <Outlet />}
               {/* </ErrorBoundary> */}
             </main>
           </div>
         </SidebarInset>
-      </div>
-    </SidebarProvider>
+      </SidebarProvider>
+    </ThemeProvider>
   );
 };
 

@@ -251,6 +251,7 @@ Use this module as a template for building additional resource modules under `sr
 
 - Tailwind CSS 4 is used throughout the app. Layout components emphasize **mobile-first** class ordering.
 - When adding responsive classes, prefer `md:` and `lg:` breakpoints and **avoid using `sm:`** in new code.
+- Prefer **design tokens / semantic utilities** (e.g. `bg-background`, `text-foreground`, `border-border`) instead of raw palette classes like `bg-slate-50`, `text-slate-900`, etc.
 - Use the shared `cn` helper from `src/core/lib/utils.ts` to compose class names.
 - Prefer using the existing shadcn-based components under `src/core/components/ui` and the higher-level wrappers under `src/core/components/refine-ui` instead of introducing ad-hoc styling or one-off components.
 
