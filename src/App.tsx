@@ -8,6 +8,10 @@ import routerProvider, {
   NavigateToResource,
   UnsavedChangesNotifier,
 } from "@refinedev/react-router";
+
+/* YOUR routing layer */
+import { AppRoutes } from "@/core/routing/app-routes";
+
 import dataProvider from "@refinedev/simple-rest";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router";
 import "./App.css";
@@ -73,6 +77,7 @@ function App() {
                 projectId: "MbtvwQ-wvX1sK-NtPreH",
               }}
             >
+              {/* <AppRoutes /> */}
               <Routes>
                 <Route
                   element={

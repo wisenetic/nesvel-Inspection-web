@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 
-import { InputPassword } from "@/core/components/refine-ui/form/input-password";
+import { CircleHelp } from "lucide-react";
+
+import { InputPassword } from "@/core/components/shared/form/input-password";
 import { Button } from "@/core/components/ui/button";
 import {
   Card,
@@ -12,58 +14,41 @@ import {
   CardHeader,
   CardTitle,
 } from "@/core/components/ui/card";
+import { Checkbox } from "@/core/components/ui/checkbox";
 import { Input } from "@/core/components/ui/input";
 import { Label } from "@/core/components/ui/label";
 import { Separator } from "@/core/components/ui/separator";
-import { cn } from "@/lib/utils";
-import {
-  useLink,
-  useNotification,
-  useRefineOptions,
-  useRegister,
-} from "@refinedev/core";
+import { cn } from "@/core/lib/utils";
+import { useLink, useLogin, useRefineOptions } from "@refinedev/core";
 
-export const SignUpForm = () => {
+export const SignInForm = () => {
+  const [rememberMe, setRememberMe] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
-  const { open } = useNotification();
 
   const Link = useLink();
 
   const { title } = useRefineOptions();
 
-  const { mutate: register } = useRegister();
+  const { mutate: login } = useLogin();
 
-  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSignIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (password !== confirmPassword) {
-      open?.({
-        type: "error",
-        message: "Passwords don't match",
-        description:
-          "Please make sure both password fields contain the same value.",
-      });
-
-      return;
-    }
-
-    register({
+    login({
       email,
       password,
     });
   };
 
-  const handleSignUpWithGoogle = () => {
-    register({
+  const handleSignInWithGoogle = () => {
+    login({
       providerName: "google",
     });
   };
 
-  const handleSignUpWithGitHub = () => {
-    register({
+  const handleSignInWithGitHub = () => {
+    login({
       providerName: "github",
     });
   };
@@ -80,7 +65,7 @@ export const SignUpForm = () => {
         "min-h-svh",
       )}
     >
-      <div className={cn("flex", "items-center", "justify-center", "gap-2")}>
+      <div className={cn("flex", "items-center", "justify-center")}>
         {title.icon && (
           <div
             className={cn("text-foreground", "[&>svg]:w-12", "[&>svg]:h-12")}
@@ -94,25 +79,25 @@ export const SignUpForm = () => {
         <CardHeader className={cn("px-0")}>
           <CardTitle
             className={cn(
-              "text-green-600",
-              "dark:text-green-400",
+              "text-blue-600",
+              "dark:text-blue-400",
               "text-3xl",
               "font-semibold",
             )}
           >
-            Sign up
+            Sign in
           </CardTitle>
           <CardDescription
             className={cn("text-muted-foreground", "font-medium")}
           >
-            Welcome to lorem ipsum dolor.
+            Welcome back
           </CardDescription>
         </CardHeader>
 
         <Separator />
 
         <CardContent className={cn("px-0")}>
-          <form onSubmit={handleSignUp}>
+          <form onSubmit={handleSignIn}>
             <div className={cn("flex", "flex-col", "gap-2")}>
               <Label htmlFor="email">Email</Label>
               <Input
@@ -124,13 +109,11 @@ export const SignUpForm = () => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-
             <div
               className={cn("relative", "flex", "flex-col", "gap-2", "mt-6")}
             >
               <Label htmlFor="password">Password</Label>
               <InputPassword
-                id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -138,29 +121,42 @@ export const SignUpForm = () => {
             </div>
 
             <div
-              className={cn("relative", "flex", "flex-col", "gap-2", "mt-6")}
-            >
-              <Label htmlFor="confirmPassword">Confirm password</Label>
-              <InputPassword
-                id="confirmPassword"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
-            </div>
-
-            <Button
-              type="submit"
-              size="lg"
               className={cn(
-                "w-full",
-                "mt-6",
-                "bg-green-600",
-                "hover:bg-green-700",
-                "text-white",
+                "flex items-center justify-between",
+                "flex-wrap",
+                "gap-2",
+                "mt-4",
               )}
             >
-              Sign up
+              <div className={cn("flex items-center", "space-x-2")}>
+                <Checkbox
+                  id="remember"
+                  checked={rememberMe}
+                  onCheckedChange={(checked) =>
+                    setRememberMe(checked === "indeterminate" ? false : checked)
+                  }
+                />
+                <Label htmlFor="remember">Remember me</Label>
+              </div>
+              <Link
+                to="/forgot-password"
+                className={cn(
+                  "text-sm",
+                  "flex",
+                  "items-center",
+                  "gap-2",
+                  "text-primary hover:underline",
+                  "text-blue-600",
+                  "dark:text-blue-400",
+                )}
+              >
+                <span>Forgot password</span>
+                <CircleHelp className={cn("w-4", "h-4")} />
+              </Link>
+            </div>
+
+            <Button type="submit" size="lg" className={cn("w-full", "mt-6")}>
+              Sign in
             </Button>
 
             <div className={cn("flex", "items-center", "gap-4", "mt-6")}>
@@ -170,11 +166,12 @@ export const SignUpForm = () => {
             </div>
 
             <div className={cn("flex", "flex-col", "gap-4", "mt-6")}>
+              <p className={cn("text-sm", "font-medium")}>Sign in using</p>
               <div className={cn("grid grid-cols-2", "gap-6")}>
                 <Button
                   variant="outline"
                   className={cn("flex", "items-center", "gap-2")}
-                  onClick={handleSignUpWithGoogle}
+                  onClick={handleSignInWithGoogle}
                   type="button"
                 >
                   <svg
@@ -189,12 +186,13 @@ export const SignUpForm = () => {
                       fill="currentColor"
                     />
                   </svg>
+
                   <div>Google</div>
                 </Button>
                 <Button
                   variant="outline"
                   className={cn("flex", "items-center", "gap-2")}
-                  onClick={handleSignUpWithGitHub}
+                  onClick={handleSignInWithGitHub}
                   type="button"
                 >
                   <svg
@@ -223,18 +221,18 @@ export const SignUpForm = () => {
         <CardFooter>
           <div className={cn("w-full", "text-center text-sm")}>
             <span className={cn("text-sm", "text-muted-foreground")}>
-              Have an account?{" "}
+              No account?{" "}
             </span>
             <Link
-              to="/login"
+              to="/register"
               className={cn(
-                "text-blue-600",
-                "dark:text-blue-400",
+                "text-green-600",
+                "dark:text-green-400",
                 "font-semibold",
                 "underline",
               )}
             >
-              Sign in
+              Sign up
             </Link>
           </div>
         </CardFooter>
@@ -243,4 +241,4 @@ export const SignUpForm = () => {
   );
 };
 
-SignUpForm.displayName = "SignUpForm";
+SignInForm.displayName = "SignInForm";

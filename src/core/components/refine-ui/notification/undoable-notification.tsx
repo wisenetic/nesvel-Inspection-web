@@ -1,5 +1,5 @@
 import { Button } from "@/core/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/core/lib/utils";
 import { useTranslate } from "@refinedev/core";
 import React from "react";
 

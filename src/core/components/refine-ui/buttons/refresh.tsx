@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/core/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/core/lib/utils";
 import { type BaseKey, useRefreshButton } from "@refinedev/core";
 import { RefreshCcw } from "lucide-react";
 import React from "react";

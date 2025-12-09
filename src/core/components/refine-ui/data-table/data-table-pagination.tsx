@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/core/components/ui/select";
-import { cn } from "@/lib/utils";
+import { cn } from "@/core/lib/utils";
 
 type DataTablePaginationProps = {
   currentPage: number;

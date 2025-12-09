@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/core/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/core/lib/utils";
 import type { Column } from "@tanstack/react-table";
 import { ArrowDown, ArrowUp, ChevronsUpDown } from "lucide-react";
 

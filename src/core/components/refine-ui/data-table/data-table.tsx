@@ -16,7 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/core/components/ui/table";
-import { cn } from "@/lib/utils";
+import { cn } from "@/core/lib/utils";
 
 type DataTableProps<TData extends BaseRecord> = {
   table: UseTableReturnType<TData, HttpError>;

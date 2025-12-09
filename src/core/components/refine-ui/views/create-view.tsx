@@ -3,7 +3,7 @@
 import { Breadcrumb } from "@/core/components/refine-ui/layout/breadcrumb";
 import { Button } from "@/core/components/ui/button";
 import { Separator } from "@/core/components/ui/separator";
-import { cn } from "@/lib/utils";
+import { cn } from "@/core/lib/utils";
 import {
   useBack,
   useResourceParams,

@@ -4,7 +4,7 @@ import {
   AvatarImage,
 } from "@/core/components/ui/avatar";
 import { Skeleton } from "@/core/components/ui/skeleton";
-import { cn } from "@/lib/utils";
+import { cn } from "@/core/lib/utils";
 import { useGetIdentity } from "@refinedev/core";
 
 type User = {

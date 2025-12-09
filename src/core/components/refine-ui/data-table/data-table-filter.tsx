@@ -24,7 +24,7 @@ import {
   PopoverTrigger,
 } from "@/core/components/ui/popover";
 import { Separator } from "@/core/components/ui/separator";
-import { cn } from "@/lib/utils";
+import { cn } from "@/core/lib/utils";
 
 export type DataTableFilterDropdownProps<TData> = {
   column: Column<TData>;

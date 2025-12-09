@@ -5,7 +5,7 @@ import type { PropsWithChildren } from "react";
 import { CreateButton } from "@/core/components/refine-ui/buttons/create";
 import { Breadcrumb } from "@/core/components/refine-ui/layout/breadcrumb";
 import { Separator } from "@/core/components/ui/separator";
-import { cn } from "@/lib/utils";
+import { cn } from "@/core/lib/utils";
 import { useResourceParams, useUserFriendlyName } from "@refinedev/core";
 
 type ListViewProps = PropsWithChildren<{

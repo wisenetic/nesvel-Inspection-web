@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/core/components/ui/dropdown-menu";
 import { SidebarTrigger, useSidebar } from "@/core/components/ui/sidebar";
-import { cn } from "@/lib/utils";
+import { cn } from "@/core/lib/utils";
 import {
   useActiveAuthProvider,
   useLogout,
