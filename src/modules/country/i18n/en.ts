@@ -1,4 +1,4 @@
 export default {
-  "country.title": "Countries",
-  "country.create": "Create Country",
+  "countries.title": "Countries",
+  "countries.create": "Create Country",
 };

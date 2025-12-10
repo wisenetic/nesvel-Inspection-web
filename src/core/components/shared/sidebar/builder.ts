@@ -3,6 +3,7 @@
 // throws when Refine context/options are not initialized in some render paths.
 // When auth/permissions are wired, re-enable this import and logic.
 // import { usePermissions } from "@refinedev/core";
+import { useTranslation } from "@refinedev/core";
 import type { AppModule } from "@/core/bootstrap/app-module.type";
 import type { SidebarConfig, SidebarItemConfig } from "./sidebar.types";
 
@@ -31,6 +32,7 @@ export function useSidebarFromModules(modules: AppModule[]): SidebarConfig {
   // TODO: integrate real permissions when authProvider + access control are ready.
   // For now, render all modules/resources and ignore permission filters.
   const userPerms: string[] = [];
+  const { translate } = useTranslation();
 
   const items: SidebarItemConfig[] = [];
 
@@ -71,7 +73,16 @@ export function useSidebarFromModules(modules: AppModule[]): SidebarConfig {
 
     // Compute final menu item
     const href = `/${res.name}`;
-    const title = mod.label ?? (res.label as string) ?? res.name ?? "Untitled";
+
+    // Prefer meta.labelKey for i18n, fallback to explicit labels
+    const rawLabelKey = (res.meta as any)?.labelKey as string | undefined;
+    const fallbackLabel =
+      (res.label as string | undefined) ??
+      mod.label ??
+      res.name ??
+      "Untitled";
+
+    const title = rawLabelKey ? translate(rawLabelKey) : fallbackLabel;
     const id = `mod-${res.name}`;
 
     const item: SidebarItemConfig = {

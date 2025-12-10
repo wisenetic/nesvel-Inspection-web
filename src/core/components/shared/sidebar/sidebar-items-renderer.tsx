@@ -92,7 +92,7 @@ export const SidebarItemsRenderer: React.FC<SidebarItemsRendererProps> = ({
         const hasChildren = !!(item.children && item.children.length > 0);
         const Icon = item.icon;
 
-        const content = renderItemContent ? (
+      const content = renderItemContent ? (
           renderItemContent({
             id: item.id,
             title: item.title,
@@ -116,8 +116,11 @@ export const SidebarItemsRenderer: React.FC<SidebarItemsRendererProps> = ({
           />
         );
 
+        // Keep structural flex layout here, but delegate typography, padding,
+        // colors, and active styles entirely to styles.item/styles.itemActive
+        // so that applications can fully control appearance.
         const commonButtonClasses = cn(
-          "flex items-center px-2 py-1 text-sm rounded-md",
+          "flex items-center rounded-md",
           styles?.item,
           isActive && styles?.itemActive,
         );

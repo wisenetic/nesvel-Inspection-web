@@ -95,7 +95,7 @@ export const DynamicSidebar: React.FC<DynamicSidebarProps> = ({
 
         {computedConfig.secondaryItems &&
           computedConfig.secondaryItems.length > 0 && (
-            <div className={cn("mt-4", styles?.secondary)}>
+            <div className={styles?.secondary}>
               <SidebarItemsRenderer
                 items={computedConfig.secondaryItems}
                 zone="secondary"

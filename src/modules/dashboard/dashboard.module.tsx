@@ -10,10 +10,10 @@ const DashboardModule: AppModule = {
   priority: 1,
   resource: {
     name: "dashboard",
-    label: "Dashboard",
     list: "/dashboard",
     meta: {
       labelKey: "dashboard.title",
+      label: "Dashboard",
     },
   },
   routes: [

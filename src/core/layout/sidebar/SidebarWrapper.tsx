@@ -6,6 +6,7 @@ import { bootstrap } from "@/core/bootstrap";
 import { useSidebarFromModules } from "@/core/components/shared/sidebar/builder";
 import { DynamicSidebar } from "@/core/components/shared/sidebar";
 import { cn } from "@/core/lib/utils";
+import { SidebarHeader } from "./sidebar-header";
 
 /**
  * SidebarWrapper renders the shadcn-based DynamicSidebar for the module system.
@@ -23,6 +24,7 @@ export const SidebarWrapper: React.FC = () => {
       variant="sidebar"
       collapsible="icon"
       className={cn("border-r border-border bg-sidebar")}
+      headerSlot={<SidebarHeader />}
       styles={{
         root: "h-svh",
         item: "h-9 text-sm font-medium",

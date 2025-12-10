@@ -5,8 +5,8 @@ import { Routes, Route, Outlet } from "react-router";
 import { Authenticated } from "@refinedev/core";
 import { NavigateToResource } from "@refinedev/react-router";
 
-import { AppLayout } from "@/core/layout/layout";
 import { ErrorComponent } from "@/core/layout/error-component";
+import { AppShell } from "@/app/layout";
 
 import {
   SignInForm,
@@ -41,9 +41,9 @@ export const AppRoutes: React.FC = () => {
         <Route
           element={
             <Authenticated fallback={<NavigateToResource to="/login" />}>
-              <AppLayout>
+              <AppShell>
                 <Outlet />
-              </AppLayout>
+              </AppShell>
             </Authenticated>
           }
         >
