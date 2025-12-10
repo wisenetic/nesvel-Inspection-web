@@ -1,5 +1,5 @@
 // src/modules/country/country.module.tsx
-import React, { Suspense } from "react";
+import React from "react";
 import type { AppModule } from "@/core/bootstrap/app-module.type";
 import { Globe } from "lucide-react";
 
@@ -9,36 +9,41 @@ const CountryEditPage = React.lazy(() => import("./pages/edit"));
 const CountryShowPage = React.lazy(() => import("./pages/show"));
 
 /**
- * This module defines:
- * - Resource metadata for Refine
- * - Sidebar grouping + priority
- * - Routes for Country CRUD
- * - Presentation settings (modal/drawer/page)
+ * Country module
+ *
+ * Aligns with Refine conventions:
+ * - module.name: internal id ("country")
+ * - resource.name: Refine resource key ("countries")
+ * - meta.labelKey: i18n key (e.g. "countries.title")
+ * - resource.icon: actual Lucide icon component for sidebar
  */
 const CountryModule: AppModule = {
+  // Internal module id
   name: "country",
-  label: "country.title",
-  group: "Geography",
+
+// Optional grouping+sorting in custom sidebar
+  group: "Data Management",
   priority: 10,
 
+  // Refine resource configuration
   resource: {
     name: "countries",
-    label: "Countries111",
+
+    // Route segments for Refine router
     list: "/countries",
     create: "/countries/create",
     edit: "/countries/edit/:id",
     show: "/countries/show/:id",
 
+    // Attach icon + i18n metadata
+    icon: Globe,
     meta: {
-      labelKey: "countries.title", // used for i18n translate()
-      icon: "Globe", // for dynamic lucide icon loader
+      labelKey: "countries.title",
+      label: "Countries",
     },
   },
 
-  /**
-   * Route definitions for refine + route controller.
-   * The ModuleRouteLoader will mount these under the correct path.
-   */
+  // Additional routes used by ModuleRouteLoader / RouteController
   routes: [
     {
       path: "countries",
