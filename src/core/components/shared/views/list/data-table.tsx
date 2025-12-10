@@ -22,11 +22,17 @@ export type DataTableProps<TData extends BaseRecord> = {
   table: UseTableReturnType<TData, HttpError>;
   /** Optional row click handler for navigation. */
   onRowClick?: (record: TData) => void;
+  /** Optional toolbar content to render on the left side above the table. */
+  toolbarLeft?: React.ReactNode;
+  /** Optional toolbar content to render on the right side above the table. */
+  toolbarRight?: React.ReactNode;
 };
 
 export function DataTable<TData extends BaseRecord>({
   table,
   onRowClick,
+  toolbarLeft,
+  toolbarRight,
 }: DataTableProps<TData>) {
   const {
     reactTable: { getHeaderGroups, getRowModel, getAllColumns },
@@ -78,20 +84,25 @@ export function DataTable<TData extends BaseRecord>({
     };
   }, [tableQuery.data?.data, pageSize]);
 
+  const defaultToolbarRight = (
+    <DataTablePagination
+      currentPage={currentPage}
+      pageCount={pageCount}
+      setCurrentPage={setCurrentPage}
+      pageSize={pageSize}
+      setPageSize={setPageSize}
+      total={tableQuery.data?.total}
+    />
+  );
+
   return (
     <div className={cn("flex", "flex-col", "flex-1", "gap-4")}>
-      {/* Top pagination toolbar (Odoo-style) */}
-      <div className={cn("flex", "justify-end")}
-      >
-        <DataTablePagination
-          currentPage={currentPage}
-          pageCount={pageCount}
-          setCurrentPage={setCurrentPage}
-          pageSize={pageSize}
-          setPageSize={setPageSize}
-          total={tableQuery.data?.total}
-        />
-      </div>
+      {(toolbarLeft || toolbarRight) && (
+        <div className={cn("flex", "items-center", "justify-between", "gap-2")}>
+          <div>{toolbarLeft}</div>
+          <div>{toolbarRight ?? defaultToolbarRight}</div>
+        </div>
+      )}
 
       <div ref={tableContainerRef} className={cn("rounded-md", "border")}>
         <Table ref={tableRef} style={{ tableLayout: "fixed", width: "100%" }}>

@@ -3,8 +3,10 @@
 import {
   ChevronLeft,
   ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
+  // ChevronsLeft,
+  // ChevronsRight,
+  List,
+  LayoutTemplate,
 } from "lucide-react";
 import { useMemo } from "react";
 
@@ -60,15 +62,45 @@ export function DataTablePagination({
         "gap-2",
       )}
     >
-      {/* Range: 1-10 / 49 */}
+      {/* Range: 1-10 / 49 with editable part */}
       <div
         className={cn(
+          "flex",
+          "items-center",
           "text-sm",
           "text-muted-foreground",
           "whitespace-nowrap",
         )}
       >
-        {hasTotal ? `${start}-${end} / ${total}` : "0 / 0"}
+        <input
+          value={`${start}-${end}`}
+          onChange={() => {
+            /* no-op; controlled via onBlur */
+          }}
+          onBlur={(event) => {
+            const raw = event.target.value.trim();
+            const match = raw.match(/^\s*(\d+)\s*-\s*(\d+)\s*$/);
+            if (!match) {
+              event.target.value = `${start}-${end}`;
+              return;
+            }
+            const nextPageSize = Number(match[2]);
+            if (!Number.isFinite(nextPageSize) || nextPageSize <= 0) {
+              event.target.value = `${start}-${end}`;
+              return;
+            }
+            setPageSize(nextPageSize);
+            setCurrentPage(1);
+          }}
+          className={cn(
+            "bg-transparent",
+            "border-none",
+            "outline-none",
+            "px-0",
+            "w-[72px]",
+          )}
+        />
+        <span className="ml-1">{hasTotal ? `/${total}` : "/0"}</span>
       </div>
 
       {/* Page size selector */}
@@ -94,15 +126,6 @@ export function DataTablePagination({
       <div className={cn("flex", "items-center", "gap-1")}>
         <Button
           variant="outline"
-          className={cn("hidden", "h-8", "w-8", "p-0", "lg:flex")}
-          onClick={() => setCurrentPage(1)}
-          disabled={currentPage === 1}
-          aria-label="Go to first page"
-        >
-          <ChevronsLeft />
-        </Button>
-        <Button
-          variant="outline"
           className={cn("h-8", "w-8", "p-0")}
           onClick={() => setCurrentPage(currentPage - 1)}
           disabled={currentPage === 1}
@@ -110,7 +133,7 @@ export function DataTablePagination({
         >
           <ChevronLeft />
         </Button>
-        <Button
+             <Button
           variant="outline"
           className={cn("h-8", "w-8", "p-0")}
           onClick={() => setCurrentPage(currentPage + 1)}
@@ -119,32 +142,23 @@ export function DataTablePagination({
         >
           <ChevronRight />
         </Button>
-        <Button
-          variant="outline"
-          className={cn("hidden", "h-8", "w-8", "p-0", "lg:flex")}
-          onClick={() => setCurrentPage(pageCount)}
-          disabled={currentPage === pageCount}
-          aria-label="Go to last page"
-        >
-          <ChevronsRight />
-        </Button>
       </div>
 
-      {/* View switch placeholders (list / other view) */}
+      {/* View switch buttons (list / form) */}
       <div className={cn("flex", "items-center", "gap-1", "ml-2")}>
         <Button
           variant="outline"
           className={cn("h-8", "w-8", "p-0")}
           aria-label="List view"
         >
-          <span className="h-[10px] w-[10px] border border-foreground" />
+          <List className="h-4 w-4" />
         </Button>
         <Button
           variant="outline"
           className={cn("h-8", "w-8", "p-0")}
-          aria-label="Alternative view"
+          aria-label="Form view"
         >
-          <span className="h-[10px] w-[10px] border border-foreground border-t-2" />
+          <LayoutTemplate className="h-4 w-4" />
         </Button>
       </div>
     </div>
