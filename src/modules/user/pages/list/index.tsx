@@ -1,14 +1,9 @@
 "use client";
 
-import type { ColumnDef } from "@tanstack/react-table";
-import { useTable } from "@refinedev/react-table";
-import type { HttpError, BaseRecord } from "@refinedev/core";
+import type { BaseRecord } from "@refinedev/core";
 
-import { ListView, ListViewHeader } from "@/core/components/refine-ui/views/list-view";
-import { DataTable } from "@/core/components/refine-ui/data-table/data-table";
-import {
-  DataTableFilterDropdownText,
-} from "@/core/components/refine-ui/data-table/data-table-filter";
+import { ResourceListView } from "@/core/components/shared/views/list";
+import type { ListViewConfig } from "@/core/components/shared/views/list";
 
 export type UserRecord = BaseRecord & {
   id: string;
@@ -20,80 +15,57 @@ export type UserRecord = BaseRecord & {
   createdAt?: string;
 };
 
-const columns: ColumnDef<UserRecord>[] = [
-  {
-    id: "name",
-    accessorKey: "name",
-    header: ({ column, table }) => (
-      <div className="flex items-center justify-between gap-2">
-        <span>Name</span>
-        <DataTableFilterDropdownText<UserRecord>
-          column={column}
-          table={table}
-          placeholder="Filter by name..."
-        />
-      </div>
-    ),
-    cell: ({ row }) => <span className="font-medium">{row.original.name}</span>,
-  },
-  {
-    id: "email",
-    accessorKey: "email",
-    header: ({ column, table }) => (
-      <div className="flex items-center justify-between gap-2">
-        <span>Email</span>
-        <DataTableFilterDropdownText<UserRecord>
-          column={column}
-          table={table}
-          placeholder="Filter by email..."
-        />
-      </div>
-    ),
-    cell: ({ row }) => <span>{row.original.email}</span>,
-  },
-  {
-    id: "role",
-    accessorKey: "role",
-    header: () => <span>Role</span>,
-    cell: ({ row }) => <span className="capitalize">{row.original.role}</span>,
-  },
-  {
-    id: "status",
-    accessorKey: "status",
-    header: () => <span>Status</span>,
-    cell: ({ row }) => (
-      <span className="capitalize text-sm text-muted-foreground">
-        {row.original.status}
-      </span>
-    ),
-  },
-  {
-    id: "createdAt",
-    accessorKey: "createdAt",
-    header: () => <span>Created at</span>,
-    cell: ({ row }) =>
-      row.original.createdAt ? (
-        <span className="text-xs text-muted-foreground">
-          {new Date(row.original.createdAt).toLocaleDateString()}
+const userListConfig: ListViewConfig<UserRecord> = {
+  // resource is inferred from route / refine resources; no need to repeat here
+  titleKey: "users.title",
+  selectable: true,
+  rowClick: "show",
+  columns: [
+    {
+      key: "name",
+      label: "Name",
+      sortable: true,
+      renderValue: (value) => (
+        <span className="font-medium">{String(value ?? "")}</span>
+      ),
+    },
+    {
+      key: "email",
+      label: "Email",
+      sortable: true,
+    },
+    {
+      key: "role",
+      label: "Role",
+      sortable: true,
+      renderValue: (value) => (
+        <span className="capitalize">{String(value ?? "")}</span>
+      ),
+    },
+    {
+      key: "status",
+      label: "Status",
+      renderValue: (value) => (
+        <span className="capitalize text-sm text-muted-foreground">
+          {String(value ?? "")}
         </span>
-      ) : null,
-  },
-];
+      ),
+    },
+    {
+      key: "createdAt",
+      label: "Created at",
+      renderValue: (value) =>
+        value ? (
+          <span className="text-xs text-muted-foreground">
+            {new Date(String(value)).toLocaleDateString()}
+          </span>
+        ) : null,
+    },
+  ],
+};
 
 const UserListPage: React.FC = () => {
-  const table = useTable<UserRecord, HttpError>({
-    columns,
-    refineCoreProps: {
-      resource: "users",
-    },
-  });
-
-  return (
-    <ListView>
-      <ListViewHeader resource="users" />
-      <DataTable table={table} />
-    </ListView>
-  );
+  return <ResourceListView<UserRecord> config={userListConfig} />;
 };
 
 export default UserListPage;
