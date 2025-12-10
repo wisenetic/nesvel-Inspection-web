@@ -89,6 +89,7 @@
     "vite": "^6.3.5"
   },
   "scripts": {
+    "mock": "refine dev --mode mock",
     "dev": "refine dev",
     "build": "tsc && refine build",
     "start": "refine start",
