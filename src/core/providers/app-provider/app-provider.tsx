@@ -16,7 +16,10 @@ import { Toaster } from "@/core/components/refine-ui/notification/toaster";
 import { useNotificationProvider } from "@/core/components/refine-ui/notification/use-notification-provider";
 
 import { ThemeProvider } from "@/core/providers/theme-provider";
-import { LanguageProvider, type LanguageItem } from "@/core/providers/language-provider";
+import {
+  LanguageProvider,
+  type LanguageItem,
+} from "@/core/providers/language-provider";
 import { getDataProvider } from "@/core/providers/data-provider";
 
 import { authProvider } from "@/core/providers/auth-provider";

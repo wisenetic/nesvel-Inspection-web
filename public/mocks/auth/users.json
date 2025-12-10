@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "name": "Admin User",
+    "email": "admin@demo.com",
+    "password": "admin",
+    "role": "admin",
+    "avatar": "https://i.pravatar.cc/100?u=admin"
+  },
+  {
+    "id": 2,
+    "name": "Operator",
+    "email": "user@demo.com",
+    "password": "user",
+    "role": "user",
+    "avatar": "https://i.pravatar.cc/100?u=user"
+  }
+]
