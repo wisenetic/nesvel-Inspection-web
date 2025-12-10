@@ -1,50 +1,67 @@
-// src/core/layout/layout.tsx
+"use client";
+
 import React from "react";
 import { Outlet } from "react-router";
 import { cn } from "@/core/lib/utils";
-//import { ErrorBoundary } from "react-error-boundary";
 
 import { SidebarWrapper } from "./sidebar/SidebarWrapper";
 import { Header } from "./header/header";
-//import { ErrorComponent } from "./error-component";
 
-import { ThemeProvider } from "@/core/providers/theme-provider";
-import { SidebarInset, SidebarProvider } from "@/core/components/ui/sidebar";
+import { SidebarProvider, SidebarInset } from "@/core/components/ui/sidebar";
 
 type AppLayoutProps = {
+  /** custom CSS classes */
   className?: string;
-  children?: React.ReactNode; // optional for custom content; default to <Outlet />
+
+  /** custom page content */
+  children?: React.ReactNode;
+
+  /** right-side header actions (desktop) */
+  desktopHeaderSlot?: React.ReactNode;
+
+  /** right-side header actions (mobile) */
+  mobileHeaderSlot?: React.ReactNode;
+
+  /** custom header search component */
+  searchSlot?: React.ReactNode;
+
+  /** hide search bar */
+  hideSearch?: boolean;
 };
 
 /**
- * AppLayout - App shell that composes Header + Sidebar + Content area.
- * - Responsive: mobile drawer for sidebar, collapsible desktop sidebar.
- * - Accessibility friendly.
+ * AppLayout — pure framework shell.
+ * No app logic, no customer dependency.
  */
 export const AppLayout: React.FC<AppLayoutProps> = ({
   className,
   children,
+  desktopHeaderSlot,
+  mobileHeaderSlot,
+  searchSlot,
+  hideSearch = false,
 }) => {
   return (
-    <ThemeProvider>
-      <SidebarProvider iconWidth="5rem">
-        {/* Sidebar (left) */}
-        <SidebarWrapper />
+    <SidebarProvider iconWidth="5rem">
+      {/* Sidebar (left inset) */}
+      <SidebarWrapper />
 
-        {/* Main content column */}
-        <SidebarInset>
-          <div className="flex min-h-screen flex-col">
-            <Header />
+      {/* Main content column */}
+      <SidebarInset>
+        {/* HEADER: Application injects custom actions */}
+        <Header
+          desktopClassName="border-b border-border bg-sidebar"
+          mobileClassName="border-b border-border bg-sidebar pr-3 justify-between"
+          desktopRightSlot={desktopHeaderSlot}
+          mobileRightSlot={mobileHeaderSlot}
+          searchSlot={searchSlot}
+          hideSearch={hideSearch}
+        />
 
-            <main className="flex p-6 md:p-8">
-              {/* <ErrorBoundary FallbackComponent={ErrorComponent}> */}
-              {children ?? <Outlet />}
-              {/* </ErrorBoundary> */}
-            </main>
-          </div>
-        </SidebarInset>
-      </SidebarProvider>
-    </ThemeProvider>
+        {/* MAIN */}
+        <main className="flex flex-1 p-6 md:p-8">{children ?? <Outlet />}</main>
+      </SidebarInset>
+    </SidebarProvider>
   );
 };
 

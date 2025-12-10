@@ -1,123 +1,132 @@
-// src/core/layout/header/header.tsx
-import React from "react";
-import { Menu, MenuItem } from "@/core/components/ui/menu"; // optional, replace if not present
-import { Button } from "@/core/components/ui/button";
-import { Avatar } from "@/core/components/ui/avatar";
-import { SunIcon, MoonIcon, LogOut, Bell } from "lucide-react";
-import { SidebarTrigger } from "@/core/components/ui/sidebar";
-import { useNavigate } from "react-router";
+"use client";
 
-/**
- * Header - top navigation, contains:
- * - mobile hamburger (toggles sidebar)
- * - breadcrumbs placeholder (optional)
- * - search placeholder (optional)
- * - project title / brand
- * - quick actions (notifications)
- * - theme toggle
- * - user avatar menu
- */
-export const Header: React.FC = () => {
-  const navigate = useNavigate();
+import type { ReactNode } from "react";
+import { SidebarTrigger, useSidebar } from "@/core/components/ui/sidebar";
+import { Input } from "@/core/components/ui/input";
+import { cn } from "@/core/lib/utils";
 
-  const [isDark, setIsDark] = React.useState(false);
+export type HeaderProps = {
+  /** Extra styles for desktop header wrapper */
+  desktopClassName?: string;
 
-  React.useEffect(() => {
-    // keep system simple: store theme in localStorage
-    const s = localStorage.getItem("theme") === "dark";
-    setIsDark(s);
-    document.documentElement.classList.toggle("dark", s);
-  }, []);
+  /** Extra styles for mobile header wrapper */
+  mobileClassName?: string;
 
-  const toggleTheme = React.useCallback(() => {
-    const next = !isDark;
-    setIsDark(next);
-    localStorage.setItem("theme", next ? "dark" : "light");
-    document.documentElement.classList.toggle("dark", next);
-  }, [isDark]);
+  /** Right side actions on desktop (App injects them) */
+  desktopRightSlot?: ReactNode;
 
-  const onLogout = () => {
-    // replace with your auth logout flow
-    // e.g. auth.signOut(); navigate("/login");
-    navigate("/logout");
-  };
+  /** Right side actions on mobile */
+  mobileRightSlot?: ReactNode;
 
+  /** Optional search bar override */
+  searchSlot?: ReactNode;
+
+  /** Hide the search bar entirely */
+  hideSearch?: boolean;
+};
+
+export const Header = ({
+  desktopClassName,
+  mobileClassName,
+  desktopRightSlot,
+  mobileRightSlot,
+  searchSlot,
+  hideSearch = false,
+}: HeaderProps) => {
+  const { isMobile } = useSidebar();
+
+  return isMobile ? (
+    <MobileHeader className={mobileClassName} rightSlot={mobileRightSlot} />
+  ) : (
+    <DesktopHeader
+      className={desktopClassName}
+      rightSlot={desktopRightSlot}
+      hideSearch={hideSearch}
+      searchSlot={searchSlot}
+    />
+  );
+};
+
+/* -------------------------------------------------------------------------- */
+/*                               DESKTOP HEADER                               */
+/* -------------------------------------------------------------------------- */
+type DesktopHeaderProps = {
+  className?: string;
+  hideSearch?: boolean;
+  searchSlot?: ReactNode;
+  rightSlot?: ReactNode;
+};
+
+const DesktopHeader = ({
+  className,
+  rightSlot,
+  hideSearch,
+  searchSlot,
+}: DesktopHeaderProps) => {
   return (
-    <header className="w-full border-b bg-white dark:bg-slate-900 dark:border-slate-800">
-      <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-3 flex items-center gap-4">
-        {/* Left: hamburger + brand */}
-        <div className="flex items-center gap-3">
-          <SidebarTrigger
-            className="md:hidden"
-            aria-label="Open sidebar"
-          />
-
-          <div className="flex items-baseline gap-2">
-            <h1 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
-              IMS
-            </h1>
-            <span className="text-sm text-slate-500 dark:text-slate-400">
-              {" "}
-              / layout
-            </span>
-          </div>
-        </div>
-
-        {/* Middle: placeholder for breadcrumb or search */}
-        <div className="flex-1">
-          {/* Breadcrumb or search can live here */}
-          <div className="hidden md:flex items-center h-10 rounded bg-slate-50 dark:bg-slate-800 px-3 text-sm text-slate-500">
-            {/* placeholder */}
-          </div>
-        </div>
-
-        {/* Right: actions */}
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" aria-label="Notifications">
-            <Bell className="w-4 h-4" />
-          </Button>
-
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleTheme}
-            aria-label="Toggle theme"
-          >
-            {isDark ? (
-              <SunIcon className="w-4 h-4" />
-            ) : (
-              <MoonIcon className="w-4 h-4" />
-            )}
-          </Button>
-
-          <div className="relative">
-            <button
-              className="flex items-center gap-2 px-2 py-1 rounded hover:bg-slate-100 dark:hover:bg-slate-800"
-              aria-label="User menu"
-              onClick={() => navigate("/profile")}
-            >
-              <Avatar>
-                <span>GM</span>
-              </Avatar>
-              <div className="hidden md:flex flex-col text-left">
-                <span className="text-sm font-medium">gaurav marsoniya</span>
-                <span className="text-xs text-slate-500">Project Manager</span>
-              </div>
-            </button>
-          </div>
-
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onLogout}
-            aria-label="Sign out"
-          >
-            <LogOut className="w-4 h-4" />
-          </Button>
-        </div>
+    <header
+      className={cn(
+        "sticky top-0 z-40 flex h-16 shrink-0 items-center gap-4 px-4",
+        className,
+      )}
+    >
+      {/* Left: sidebar trigger */}
+      <div className="flex items-center">
+        <SidebarTrigger className="text-muted-foreground" />
       </div>
+
+      {/* Center: Search (optional, can be overridden) */}
+      {!hideSearch && (
+        <div className="flex flex-1 justify-center px-4">
+          {searchSlot ? (
+            searchSlot
+          ) : (
+            <div className="w-full max-w-xl">
+              <Input
+                type="search"
+                placeholder="Search"
+                className="h-9 bg-background"
+              />
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Right: app-provided actions */}
+      <div className="ml-auto flex items-center gap-3">{rightSlot}</div>
     </header>
   );
 };
 
-export default Header;
+/* -------------------------------------------------------------------------- */
+/*                                MOBILE HEADER                               */
+/* -------------------------------------------------------------------------- */
+type MobileHeaderProps = {
+  className?: string;
+  rightSlot?: ReactNode;
+};
+
+const MobileHeader = ({ className, rightSlot }: MobileHeaderProps) => {
+  const { open, isMobile } = useSidebar();
+
+  return (
+    <header
+      className={cn(
+        "sticky top-0 z-40 flex h-12 shrink-0 items-center gap-2 px-2",
+        className,
+      )}
+    >
+      {/* Mobile Sidebar Trigger */}
+      <SidebarTrigger
+        className={cn("text-muted-foreground rotate-180 ml-1", {
+          "opacity-0": open,
+          "opacity-100": !open || isMobile,
+          "pointer-events-none": open && !isMobile,
+        })}
+      />
+
+      {/* Right side actions */}
+      <div className="ml-auto flex items-center gap-2">{rightSlot}</div>
+    </header>
+  );
+};

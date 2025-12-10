@@ -1,11 +1,12 @@
 // src/modules/country/country.module.tsx
+import React, { Suspense } from "react";
 import type { AppModule } from "@/core/bootstrap/app-module.type";
 import { Globe } from "lucide-react";
 
-import CountryListPage from "./pages/list";
-import CountryCreatePage from "./pages/create";
-import CountryEditPage from "./pages/edit";
-import CountryShowPage from "./pages/show";
+const CountryListPage = React.lazy(() => import("./pages/list"));
+const CountryCreatePage = React.lazy(() => import("./pages/create"));
+const CountryEditPage = React.lazy(() => import("./pages/edit"));
+const CountryShowPage = React.lazy(() => import("./pages/show"));
 
 /**
  * This module defines:
@@ -16,13 +17,13 @@ import CountryShowPage from "./pages/show";
  */
 const CountryModule: AppModule = {
   name: "country",
-  label: "Countries",
+  label: "country.title",
   group: "Geography",
   priority: 10,
 
   resource: {
     name: "countries",
-    label: "Countries",
+    label: "Countries111",
     list: "/countries",
     create: "/countries/create",
     edit: "/countries/edit/:id",
@@ -66,29 +67,6 @@ const CountryModule: AppModule = {
       },
     },
   ],
-
-  /**
-   * (Optional) Presentation defaults for /r/:resource/edit/:id overlay routes
-   */
-  presentation: {
-    edit: { view: "drawer", side: "right", className: "w-[500px]" },
-    show: { view: "modal", className: "max-w-xl" },
-    create: "page",
-  },
-
-  /**
-   * Optional: For overlay rendering (RouteController)
-   */
-  renderPresentation: ({ mode }) => {
-    switch (mode) {
-      case "modal":
-        return <CountryShowPage />;
-      case "drawer":
-        return <CountryEditPage />;
-      default:
-        return null;
-    }
-  },
 };
 
 export default CountryModule;
