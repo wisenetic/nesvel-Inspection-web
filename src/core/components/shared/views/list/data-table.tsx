@@ -144,14 +144,16 @@ export function DataTable<TData extends BaseRecord>({
                       )}
                     >
                       {isPlaceholder ? null : (
-                        <div className={cn("flex", "items-center", "gap-1")}
-                        >
+                        <div className={cn("flex", "items-center", "gap-1")}>
                           {flexRender(
                             header.column.columnDef.header,
                             header.getContext(),
                           )}
                           {isLastHeader && (
-                            <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                            <div
+                              className="absolute top-1/2 -translate-y-1/2"
+                              style={{ insetInlineEnd: "0.5rem" }}
+                            >
                               <DataTableColumnVisibility<TData>
                                 columns={leafColumns}
                               />

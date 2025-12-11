@@ -19,11 +19,24 @@ export type UseListControllerResult<TRecord extends BaseRecord> = {
   onRowClick?: (record: TRecord) => void;
 };
 
+type BuiltColumnsResult<TRecord extends BaseRecord> = {
+  columns: ColumnDef<TRecord>[];
+  initialVisibility?: Record<string, boolean>;
+};
+
 function buildColumns<TRecord extends BaseRecord = BaseRecord>(
   config: ListViewConfig<TRecord>,
   translate: ReturnType<typeof useTranslate>,
-): ColumnDef<TRecord>[] {
+): BuiltColumnsResult<TRecord> {
   const columns: ColumnDef<TRecord>[] = [];
+  const visibility: Record<string, boolean> = {};
+
+  const maxInitialVisible =
+    typeof config.maxInitialVisibleColumns === "number" &&
+    config.maxInitialVisibleColumns > 0
+      ? config.maxInitialVisibleColumns
+      : undefined;
+  let remainingInitialVisible = maxInitialVisible;
 
   if (config.selectable) {
     const selectionColumn: ColumnDef<TRecord> = {
@@ -41,7 +54,7 @@ function buildColumns<TRecord extends BaseRecord = BaseRecord>(
         </div>
       ),
       cell: ({ row }) => (
-        <div className="flex items-center justify-center px-1">
+        <div className="flex  px-1">
           <Checkbox
             aria-label="Select row"
             checked={row.getIsSelected()}
@@ -66,9 +79,23 @@ function buildColumns<TRecord extends BaseRecord = BaseRecord>(
     columns.push(selectionColumn);
   }
 
-  const valueColumns = (config.columns ?? []).filter((c) => !c.hidden);
+  const valueColumns = config.columns ?? [];
 
   const mapColumn = (col: ListColumnConfig<TRecord>): ColumnDef<TRecord> => {
+    // Determine whether the column should be visible by default.
+    let visibleByDefault = true;
+
+    if (col.hidden) {
+      // Explicitly hidden but still available via toggle.
+      visibleByDefault = false;
+    } else if (remainingInitialVisible !== undefined) {
+      if (remainingInitialVisible > 0) {
+        visibleByDefault = true;
+        remainingInitialVisible -= 1;
+      } else {
+        visibleByDefault = false;
+      }
+    }
     const headerLabel = col.labelKey
       ? translate(col.labelKey, col.label ?? col.labelKey)
       : col.label ?? col.key;
@@ -80,12 +107,11 @@ function buildColumns<TRecord extends BaseRecord = BaseRecord>(
         ? (row) => col.accessor?.(row as TRecord)
         : undefined,
       enableSorting: col.sortable,
+      enableHiding: col.alwaysVisible ? false : true,
       header: () => <span>{headerLabel}</span>,
       cell: (ctx) => {
         const record = ctx.row.original as TRecord;
-        const rawValue = col.accessor
-          ? col.accessor(record)
-          : ctx.getValue();
+        const rawValue = col.accessor ? col.accessor(record) : ctx.getValue();
 
         if (col.cell) return col.cell(record);
         if (col.renderValue) return col.renderValue(rawValue, record);
@@ -100,25 +126,39 @@ function buildColumns<TRecord extends BaseRecord = BaseRecord>(
       },
     };
 
+    // Track initial column visibility by id.
+    visibility[col.key] = visibleByDefault;
+
     return def;
   };
 
-  return [...columns, ...valueColumns.map(mapColumn)];
+  const allColumns = [...columns, ...valueColumns.map(mapColumn)];
+
+  return {
+    columns: allColumns,
+    initialVisibility:
+      Object.keys(visibility).length > 0 ? visibility : undefined,
+  };
 }
 
-export function useListController<
-  TRecord extends BaseRecord = BaseRecord,
->(config: ListViewConfig<TRecord>): UseListControllerResult<TRecord> {
+export function useListController<TRecord extends BaseRecord = BaseRecord>(
+  config: ListViewConfig<TRecord>,
+): UseListControllerResult<TRecord> {
   const t = useTranslate();
   const navigation = useNavigation();
 
-  const columns = useMemo<ColumnDef<TRecord>[]>(
+  const { columns, initialVisibility } = useMemo<BuiltColumnsResult<TRecord>>(
     () => buildColumns<TRecord>(config, t),
     [config, t],
   );
 
   const table = useTable<TRecord, HttpError>({
     columns,
+    initialState: initialVisibility
+      ? {
+          columnVisibility: initialVisibility,
+        }
+      : undefined,
     refineCoreProps: {
       resource: config.resource!,
       // initialSorter can be enabled when we wire richer sorting config

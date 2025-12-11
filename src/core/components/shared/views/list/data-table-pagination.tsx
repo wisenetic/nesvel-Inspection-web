@@ -8,16 +8,8 @@ import {
   List,
   LayoutTemplate,
 } from "lucide-react";
-import { useMemo } from "react";
 
 import { Button } from "@/core/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/core/components/ui/select";
 import { cn } from "@/core/lib/utils";
 
 export type DataTablePaginationProps = {
@@ -37,17 +29,6 @@ export function DataTablePagination({
   setPageSize,
   total,
 }: DataTablePaginationProps) {
-  const pageSizeOptions = useMemo(() => {
-    const baseOptions = [10, 20, 30, 40, 50];
-    const optionsSet = new Set(baseOptions);
-
-    if (!optionsSet.has(pageSize)) {
-      optionsSet.add(pageSize);
-    }
-
-    return Array.from(optionsSet).sort((a, b) => a - b);
-  }, [pageSize]);
-
   const hasTotal = typeof total === "number" && total > 0;
   const start = hasTotal ? (currentPage - 1) * pageSize + 1 : 0;
   const end = hasTotal ? Math.min(total!, currentPage * pageSize) : 0;
@@ -62,7 +43,7 @@ export function DataTablePagination({
         "gap-2",
       )}
     >
-      {/* Range: 1-10 / 49 with editable part */}
+      {/* Range: 1-10 / 49 with editable part controlling page size */}
       <div
         className={cn(
           "flex",
@@ -101,25 +82,6 @@ export function DataTablePagination({
           )}
         />
         <span className="ml-1">{hasTotal ? `/${total}` : "/0"}</span>
-      </div>
-
-      {/* Page size selector */}
-      <div className={cn("flex", "items-center", "gap-1")}>
-        <Select
-          value={`${pageSize}`}
-          onValueChange={(v) => setPageSize(Number(v))}
-        >
-          <SelectTrigger className={cn("h-8", "w-[64px]")}>
-            <SelectValue placeholder={pageSize} />
-          </SelectTrigger>
-          <SelectContent side="top">
-            {pageSizeOptions.map((size) => (
-              <SelectItem key={size} value={`${size}`}>
-                {size}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
       </div>
 
       {/* Pagination arrows */}

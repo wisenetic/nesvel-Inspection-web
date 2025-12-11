@@ -20,11 +20,16 @@ const userListConfig: ListViewConfig<UserRecord> = {
   titleKey: "users.title",
   selectable: true,
   rowClick: "show",
+  // Keep the first four columns visible by default; the rest start
+  // hidden but are available in the column toggle menu.
+  maxInitialVisibleColumns: 4,
   columns: [
     {
       key: "name",
       label: "Name",
       sortable: true,
+      // Primary identifier should never be hideable.
+      alwaysVisible: true,
       renderValue: (value) => (
         <span className="font-medium">{String(value ?? "")}</span>
       ),
@@ -47,6 +52,23 @@ const userListConfig: ListViewConfig<UserRecord> = {
       label: "Status",
       renderValue: (value) => (
         <span className="capitalize text-sm text-muted-foreground">
+          {String(value ?? "")}
+        </span>
+      ),
+    },
+    // Additional fields that are hidden by default but can be enabled
+    // via the column toggle.
+    {
+      key: "phone",
+      label: "Phone",
+      hidden: true,
+    },
+    {
+      key: "createdAt",
+      label: "Created at",
+      hidden: true,
+      renderValue: (value) => (
+        <span className="text-xs text-muted-foreground">
           {String(value ?? "")}
         </span>
       ),

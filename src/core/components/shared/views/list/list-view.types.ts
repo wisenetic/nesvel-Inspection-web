@@ -19,8 +19,17 @@ export type ListColumnConfig<TRecord extends BaseRecord = BaseRecord> = {
   /** Whether this column is sortable. */
   sortable?: boolean;
 
-  /** Hide this column from the table. */
+  /**
+   * When true, the column starts hidden but can be enabled via the
+   * column-visibility toggle.
+   */
   hidden?: boolean;
+
+  /**
+   * Prevent the user from hiding this column via the column toggle.
+   * Useful for key identifiers you always want on screen.
+   */
+  alwaysVisible?: boolean;
 
   /** Horizontal text alignment. */
   align?: "left" | "center" | "right";
@@ -63,6 +72,13 @@ export type ListViewConfig<TRecord extends BaseRecord = BaseRecord> = {
 
   /** Column definitions. */
   columns: ListColumnConfig<TRecord>[];
+
+  /**
+   * Maximum number of data columns that should be visible by default.
+   * Remaining columns start hidden but are available from the column
+   * toggle menu. When omitted, all non-hidden columns start visible.
+   */
+  maxInitialVisibleColumns?: number;
 
   /** Show selection checkbox column. */
   selectable?: boolean;
