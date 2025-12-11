@@ -4,12 +4,20 @@ import type { BaseRecord, HttpError } from "@refinedev/core";
 import type { UseTableReturnType } from "@refinedev/react-table";
 import type { Column } from "@tanstack/react-table";
 import { flexRender } from "@tanstack/react-table";
-import { Loader2 } from "lucide-react";
+import { SlidersHorizontal, Loader2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { DataTablePagination } from "./data-table-pagination";
+import { Button } from "@/core/components/ui/button";
 import {
-  Table,
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/core/components/ui/dropdown-menu";
+import { Table,
   TableBody,
   TableCell,
   TableHead,
@@ -97,20 +105,25 @@ export function DataTable<TData extends BaseRecord>({
 
   return (
     <div className={cn("flex", "flex-col", "flex-1", "gap-4")}>
-      {(toolbarLeft || toolbarRight) && (
+      {(toolbarLeft || toolbarRight || defaultToolbarRight) && (
         <div className={cn("flex", "items-center", "justify-between", "gap-2")}>
           <div>{toolbarLeft}</div>
-          <div>{toolbarRight ?? defaultToolbarRight}</div>
+          <div className={cn("flex", "items-center", "gap-2")}>
+            {toolbarRight ?? defaultToolbarRight}
+          </div>
         </div>
       )}
 
       <div ref={tableContainerRef} className={cn("rounded-md", "border")}>
         <Table ref={tableRef} style={{ tableLayout: "fixed", width: "100%" }}>
           <TableHeader>
-            {getHeaderGroups().map((headerGroup) => (
+            {getHeaderGroups().map((headerGroup, groupIndex) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
+                {headerGroup.headers.map((header, headerIndex) => {
                   const isPlaceholder = header.isPlaceholder;
+                  const isLastHeader =
+                    groupIndex === 0 &&
+                    headerIndex === headerGroup.headers.length - 1;
 
                   const meta = header.column.columnDef
                     .meta as { align?: string } | undefined;
@@ -125,15 +138,24 @@ export function DataTable<TData extends BaseRecord>({
                         }),
                       }}
                       className={cn(
+                        "relative", // needed for absolutely positioned icon
                         meta?.align === "center" && "text-center",
                         meta?.align === "right" && "text-right",
                       )}
                     >
                       {isPlaceholder ? null : (
-                        <div className={cn("flex", "items-center", "gap-1")}>
+                        <div className={cn("flex", "items-center", "gap-1")}
+                        >
                           {flexRender(
                             header.column.columnDef.header,
                             header.getContext(),
+                          )}
+                          {isLastHeader && (
+                            <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                              <DataTableColumnVisibility<TData>
+                                columns={leafColumns}
+                              />
+                            </div>
                           )}
                         </div>
                       )}
@@ -348,3 +370,64 @@ export function getCommonStyles<TData>({
 }
 
 DataTable.displayName = "DataTable";
+
+// -----------------------------------------------------------------------------
+// Column visibility (hide/show) controls
+// -----------------------------------------------------------------------------
+
+type DataTableColumnVisibilityProps<TData> = {
+  columns: Column<TData>[];
+};
+
+function DataTableColumnVisibility<TData>({
+  columns,
+}: DataTableColumnVisibilityProps<TData>) {
+  // Only leaf, hideable columns
+  const hideableColumns = columns.filter((column) => column.getCanHide());
+
+  if (hideableColumns.length === 0) return null;
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          type="button"
+          variant="outline"
+          size="icon"
+          className={cn("h-7", "w-7", "rounded-md", "border-border", "bg-background/50")}
+        >
+          <SlidersHorizontal className="h-4 w-4" />
+          <span className="sr-only">Toggle columns</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-52">
+        <DropdownMenuLabel className="text-xs font-medium">
+          Toggle columns
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        {hideableColumns.map((column) => {
+          const id = column.id ?? "";
+          const meta = column.columnDef.meta as
+            | { label?: string }
+            | undefined;
+          const label =
+            meta?.label ||
+            (typeof column.columnDef.header === "string"
+              ? column.columnDef.header
+              : id);
+
+          return (
+            <DropdownMenuCheckboxItem
+              key={id}
+              className="capitalize"
+              checked={column.getIsVisible()}
+              onCheckedChange={(value) => column.toggleVisibility(!!value)}
+            >
+              {label}
+            </DropdownMenuCheckboxItem>
+          );
+        })}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}

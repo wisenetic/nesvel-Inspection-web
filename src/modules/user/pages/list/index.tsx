@@ -51,16 +51,6 @@ const userListConfig: ListViewConfig<UserRecord> = {
         </span>
       ),
     },
-    {
-      key: "createdAt",
-      label: "Created at",
-      renderValue: (value) =>
-        value ? (
-          <span className="text-xs text-muted-foreground">
-            {new Date(String(value)).toLocaleDateString()}
-          </span>
-        ) : null,
-    },
   ],
 };
 

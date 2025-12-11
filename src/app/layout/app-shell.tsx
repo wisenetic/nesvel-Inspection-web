@@ -29,7 +29,7 @@ export function AppShell({ children }: PropsWithChildren) {
       mobileHeaderSlot={<ThemeToggle className="h-8 w-8" />}
       // You can plug in a breadcrumb/search component here later
       // searchSlot={<YourSearchComponent />}
-      hideSearch
+      hideSearch={false}
     >
       {children}
     </AppLayout>

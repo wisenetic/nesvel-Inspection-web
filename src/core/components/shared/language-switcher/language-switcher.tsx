@@ -1,4 +1,4 @@
-import { useTranslation } from "@refinedev/core";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@/core/components/ui/button";
 import {
@@ -24,11 +24,11 @@ export const LanguageSwitcher = ({
   triggerClassName,
   contentClassName,
 }: LanguageSwitcherProps) => {
-  const { getLocale, changeLocale } = useTranslation();
+  const { i18n } = useTranslation();
 
   const languages = useLanguages();
 
-  const currentLangKey = getLocale();
+  const currentLangKey = i18n.language;
   const currentLang =
     languages.find((lang) => lang.key === currentLangKey) ?? languages[0];
 
@@ -68,7 +68,7 @@ export const LanguageSwitcher = ({
 
   const handleChange = (lang: string) => {
     if (!lang || lang === currentLangKey) return;
-    changeLocale(lang);
+    void i18n.changeLanguage(lang);
   };
 
   return (

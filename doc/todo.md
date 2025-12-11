@@ -18,3 +18,5 @@ fallback={<Outlet />}
 > </Route>
 
 3. <CatchAllNavigate to="/login" /> used instad of <NavigateToResource to="/login" />
+
+4. We need to use useTrnaslation from @refine/core in language switcher
