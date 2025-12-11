@@ -93,7 +93,7 @@ const DesktopHeader = ({
       )}
 
       {/* Right: app-provided actions */}
-      <div className="ml-auto flex items-center gap-3">{rightSlot}</div>
+      <div className="flex items-center gap-3">{rightSlot}</div>
     </header>
   );
 };
