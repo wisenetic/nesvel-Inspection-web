@@ -4,9 +4,9 @@ import type { AppModule } from "@/core/bootstrap/app-module.type";
 import { Globe } from "lucide-react";
 
 const CountryListPage = React.lazy(() => import("./pages/list"));
-const CountryCreatePage = React.lazy(() => import("./pages/create"));
-const CountryEditPage = React.lazy(() => import("./pages/edit"));
-const CountryShowPage = React.lazy(() => import("./pages/show"));
+// const CountryCreatePage = React.lazy(() => import("./pages/create"));
+// const CountryEditPage = React.lazy(() => import("./pages/edit"));
+// const CountryShowPage = React.lazy(() => import("./pages/show"));
 
 /**
  * Country module
@@ -49,28 +49,28 @@ const CountryModule: AppModule = {
       path: "countries",
       element: <CountryListPage />,
     },
-    {
-      path: "countries/create",
-      element: <CountryCreatePage />,
-      presentation: "page",
-    },
-    {
-      path: "countries/edit/:id",
-      element: <CountryEditPage />,
-      presentation: {
-        view: "drawer",
-        side: "right",
-        className: "w-[500px]",
-      },
-    },
-    {
-      path: "countries/show/:id",
-      element: <CountryShowPage />,
-      presentation: {
-        view: "modal",
-        className: "max-w-xl",
-      },
-    },
+    // {
+    //   path: "countries/create",
+    //   element: <CountryCreatePage />,
+    //   presentation: "page",
+    // },
+    // {
+    //   path: "countries/edit/:id",
+    //   element: <CountryEditPage />,
+    //   presentation: {
+    //     view: "drawer",
+    //     side: "right",
+    //     className: "w-[500px]",
+    //   },
+    // },
+    // {
+    //   path: "countries/show/:id",
+    //   element: <CountryShowPage />,
+    //   presentation: {
+    //     view: "modal",
+    //     className: "max-w-xl",
+    //   },
+    // },
   ],
 };
 

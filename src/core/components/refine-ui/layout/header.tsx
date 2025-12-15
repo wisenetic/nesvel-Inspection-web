@@ -133,8 +133,8 @@ const UserDropdown = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem
-          onClick={() => {
-            logout();
+          onClick={async() => {
+            await logout();
           }}
         >
           <LogOutIcon

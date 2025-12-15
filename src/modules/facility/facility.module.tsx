@@ -7,7 +7,7 @@ const FacilityListPage = React.lazy(() => import("./pages/list"));
 
 const FacilityModule: AppModule = {
   name: "facility",
-  label: "Facilities",
+  label: "facility.title",
   group: "Data Management",
   priority: 15,
   resource: {

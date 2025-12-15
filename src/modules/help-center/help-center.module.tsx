@@ -21,7 +21,7 @@ const HelpCenterModule: AppModule = {
   },
   routes: [
     {
-      path: "help-center",
+      path: "help_center",
       element: <HelpCenterListPage />,
     },
   ],

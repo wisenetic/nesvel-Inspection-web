@@ -78,7 +78,7 @@ export function DataTablePagination({
             "border-none",
             "outline-none",
             "px-0",
-            "w-[72px]",
+            "w-7",
           )}
         />
         <span className="ml-1">{hasTotal ? `/${total}` : "/0"}</span>
