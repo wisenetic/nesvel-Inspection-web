@@ -14,6 +14,8 @@ import {
   ForgotPasswordForm,
 } from "@/core/components/shared/form";
 
+import { LoginPage } from "@/pages/login";
+import { SignUpPage } from "@/pages/register";
 import { bootstrap } from "@/core/bootstrap";
 import { renderModuleRoutes } from "./module-route-loader";
 import { RouteController } from "./route-controller";
@@ -41,8 +43,8 @@ export const AppRoutes: React.FC = () => {
         </Route>
 
         {/* Public Authentication Routes <Login /> <Register /> <ForgotPassword />*/}
-        <Route path="/login" element={<SignInForm />} />
-        <Route path="/register" element={<SignUpForm />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordForm />} />
       </Routes>
 
