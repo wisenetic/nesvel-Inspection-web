@@ -1,10 +1,10 @@
-import { ForgotPasswordForm } from "@/core/components/shared/form/forgot-password-form";
+import { SignInForm } from "@/core/components/shared/form/sign-in-form";
 
-export const ForgotPasswordPage = () => {
+export const SignInPage = () => {
   return (
     <div className="bg-muted flex min-h-svh flex-col items-center justify-center p-6 md:p-10">
       <div className="w-full max-w-sm md:max-w-4xl">
-        <ForgotPasswordForm />;
+        <SignInForm />
       </div>
     </div>
   );

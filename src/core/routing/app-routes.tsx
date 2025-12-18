@@ -8,12 +8,9 @@ import { NavigateToResource } from "@refinedev/react-router";
 import { ErrorComponent } from "@/core/layout/error-component";
 import { AppShell } from "@/app/layout";
 
-import {
-  SignInForm,
-  SignUpForm,
-  ForgotPasswordForm,
-} from "@/core/components/shared/form";
-
+import { SignInPage } from "@/pages/sign-in";
+import { SignUpPage } from "@/pages/sign-up";
+import { ForgotPasswordPage } from "@/pages/forgot-password";
 import { bootstrap } from "@/core/bootstrap";
 import { renderModuleRoutes } from "./module-route-loader";
 import { RouteController } from "./route-controller";
@@ -41,9 +38,9 @@ export const AppRoutes: React.FC = () => {
         </Route>
 
         {/* Public Authentication Routes <Login /> <Register /> <ForgotPassword />*/}
-        <Route path="/login" element={<SignInForm />} />
-        <Route path="/register" element={<SignUpForm />} />
-        <Route path="/forgot-password" element={<ForgotPasswordForm />} />
+        <Route path="/signin" element={<SignInPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       </Routes>
 
       {/* Overlay Controller (Modal/Drawer) */}
