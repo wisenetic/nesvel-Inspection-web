@@ -1,22 +1,20 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, GalleryVerticalEnd } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/core/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/core/components/ui/card";
+import { Card, CardContent } from "@/core/components/ui/card";
 import { Input } from "@/core/components/ui/input";
-import { Label } from "@/core/components/ui/label";
+
 import { cn } from "@/core/lib/utils";
 import { useForgotPassword, useLink, useRefineOptions } from "@refinedev/core";
+import { FieldGroup, Field, FieldLabel } from "../../ui/field";
 
-export const ForgotPasswordForm = () => {
+export const ForgotPasswordForm = ({
+  className,
+  ...props
+}: React.ComponentProps<"div">) => {
   const [email, setEmail] = useState("");
 
   const Link = useLink();
@@ -34,91 +32,48 @@ export const ForgotPasswordForm = () => {
   };
 
   return (
-    <div
-      className={cn(
-        "flex",
-        "flex-col",
-        "items-center",
-        "justify-center",
-        "px-6",
-        "py-8",
-        "min-h-svh",
-      )}
-    >
-      <div className={cn("flex", "items-center", "justify-center", "gap-2")}>
-        {title.icon && (
-          <div
-            className={cn("text-foreground", "[&>svg]:w-12", "[&>svg]:h-12")}
-          >
-            {title.icon}
-          </div>
-        )}
-      </div>
-
-      <Card className={cn("sm:w-[456px]", "p-12", "mt-6")}>
-        <CardHeader className={cn("px-0")}>
-          <CardTitle
-            className={cn(
-              "text-blue-600",
-              "dark:text-blue-400",
-              "text-3xl",
-              "font-semibold",
-            )}
-          >
-            Forgot password
-          </CardTitle>
-          <CardDescription
-            className={cn("text-muted-foreground", "font-medium")}
-          >
-            Enter your email to change your password.
-          </CardDescription>
-        </CardHeader>
-
-        <CardContent className={cn("px-0")}>
-          <form onSubmit={handleForgotPassword}>
-            <div className={cn("flex", "flex-col", "gap-2")}>
-              <Label htmlFor="email">Email</Label>
-              <div className={cn("flex", "gap-2")}>
+    <div className={cn("flex flex-col gap-6", className)} {...props}>
+      <Card className="overflow-hidden p-0">
+        <CardContent className="grid p-0 md:grid-cols-2">
+          <form onSubmit={handleForgotPassword} className="p-6 md:p-8">
+            <FieldGroup>
+              <div className="flex flex-col items-center gap-2 text-center">
+                <a
+                  href="#"
+                  className="flex items-center gap-2 self-center font-medium"
+                >
+                  <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
+                    {title.icon ?? <GalleryVerticalEnd className="size-4" />}
+                  </div>
+                  <div className="">IMS</div>
+                </a>
+                <h1 className="text-2xl font-bold">Forgot password</h1>
+                <p className="text-muted-foreground text-balance">
+                  Enter your email to change your password.
+                </p>
+              </div>
+              <Field>
+                <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
                   id="email"
                   type="email"
-                  placeholder=""
+                  placeholder="m@example.com"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className={cn("flex-1")}
                 />
-                <Button
-                  type="submit"
-                  className={cn(
-                    "bg-blue-600",
-                    "hover:bg-blue-700",
-                    "text-white",
-                    "px-6",
-                  )}
-                >
-                  Send
-                </Button>
-              </div>
-            </div>
+              </Field>
+              <Field>
+                <Button type="submit">Send</Button>
+              </Field>
+            </FieldGroup>
           </form>
-
-          <div className={cn("mt-8")}>
-            <Link
-              to="/login"
-              className={cn(
-                "inline-flex",
-                "items-center",
-                "gap-2",
-                "text-sm",
-                "text-muted-foreground",
-                "hover:text-foreground",
-                "transition-colors",
-              )}
-            >
-              <ArrowLeft className={cn("w-4", "h-4")} />
-              <span>Back</span>
-            </Link>
+          <div className="bg-black relative hidden md:block">
+            <img
+              src="/ims.png"
+              alt="Image"
+              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+            />
           </div>
         </CardContent>
       </Card>

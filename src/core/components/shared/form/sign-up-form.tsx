@@ -20,6 +20,7 @@ import {
   useRefineOptions,
   useRegister,
 } from "@refinedev/core";
+import { GalleryVerticalEnd } from "lucide-react";
 
 export const SignUpForm = ({
   className,
@@ -61,9 +62,18 @@ export const SignUpForm = ({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8">
+          <form className="p-6 md:p-8" onSubmit={handleSignUp}>
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
+                <a
+                  href="#"
+                  className="flex items-center gap-2 self-center font-medium"
+                >
+                  <div className="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
+                    {title.icon ?? <GalleryVerticalEnd className="size-4" />}
+                  </div>
+                  <div className="">IMS</div>
+                </a>
                 <h1 className="text-2xl font-bold">Create your account</h1>
                 <p className="text-muted-foreground text-sm text-balance">
                   Enter your email below to create your account
