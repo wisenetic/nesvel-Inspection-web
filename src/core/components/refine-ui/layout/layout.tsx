@@ -21,6 +21,7 @@ export function Layout({ children }: PropsWithChildren) {
               "mx-auto",
               "relative",
               "w-full",
+              "min-w-0",
               "flex",
               "flex-col",
               "flex-1",
@@ -31,7 +32,8 @@ export function Layout({ children }: PropsWithChildren) {
               "lg:pt-6",
             )}
           >
-            {children}
+            {/* Only this wrapper should scroll horizontally (tables/grids/etc). */}
+            <div className="min-w-0 flex-1 overflow-x-auto">{children}</div>
           </main>
         </SidebarInset>
       </SidebarProvider>

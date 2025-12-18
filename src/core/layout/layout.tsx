@@ -59,7 +59,12 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
         />
 
         {/* MAIN */}
-        <main className="flex flex-1 p-6 md:p-8">{children ?? <Outlet />}</main>
+        <main className="flex min-w-0 flex-1 p-6 md:p-8">
+          {/* Only this wrapper should scroll horizontally (tables/grids/etc). */}
+          <div className="min-w-0 flex-1 overflow-x-auto">
+            {children ?? <Outlet />}
+          </div>
+        </main>
       </SidebarInset>
     </SidebarProvider>
   );
