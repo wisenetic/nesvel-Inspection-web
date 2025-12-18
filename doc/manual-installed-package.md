@@ -1,3 +1,8 @@
 ## axios
 
 HTTP client for API requests.
+
+ i18next 25.7.2
+ i18next-browser-languagedetector 8.2.0
+i18next-http-backend 3.0.2
+react-i18next 16.4.0

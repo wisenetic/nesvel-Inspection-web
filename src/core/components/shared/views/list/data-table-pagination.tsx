@@ -43,7 +43,7 @@ export function DataTablePagination({
         "gap-2",
       )}
     >
-      {/* Range: 1-10 / 49 with editable part controlling page size */}
+      {/* Range: 1-10 / 49 */}
       <div
         className={cn(
           "flex",
@@ -53,34 +53,7 @@ export function DataTablePagination({
           "whitespace-nowrap",
         )}
       >
-        <input
-          value={`${start}-${end}`}
-          onChange={() => {
-            /* no-op; controlled via onBlur */
-          }}
-          onBlur={(event) => {
-            const raw = event.target.value.trim();
-            const match = raw.match(/^\s*(\d+)\s*-\s*(\d+)\s*$/);
-            if (!match) {
-              event.target.value = `${start}-${end}`;
-              return;
-            }
-            const nextPageSize = Number(match[2]);
-            if (!Number.isFinite(nextPageSize) || nextPageSize <= 0) {
-              event.target.value = `${start}-${end}`;
-              return;
-            }
-            setPageSize(nextPageSize);
-            setCurrentPage(1);
-          }}
-          className={cn(
-            "bg-transparent",
-            "border-none",
-            "outline-none",
-            "px-0",
-            "w-[72px]",
-          )}
-        />
+        <span>{hasTotal ? `${start}-${end}` : "0-0"}</span>
         <span className="ml-1">{hasTotal ? `/${total}` : "/0"}</span>
       </div>
 
@@ -95,7 +68,7 @@ export function DataTablePagination({
         >
           <ChevronLeft />
         </Button>
-             <Button
+        <Button
           variant="outline"
           className={cn("h-8", "w-8", "p-0")}
           onClick={() => setCurrentPage(currentPage + 1)}

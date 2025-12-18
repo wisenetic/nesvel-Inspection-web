@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 
 import type { BaseRecord, HttpError } from "@refinedev/core";
-import { useNavigation, useTranslate } from "@refinedev/core";
+import { useGo, useTranslate } from "@refinedev/core";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useTable, type UseTableReturnType } from "@refinedev/react-table";
 
@@ -145,7 +145,7 @@ export function useListController<TRecord extends BaseRecord = BaseRecord>(
   config: ListViewConfig<TRecord>,
 ): UseListControllerResult<TRecord> {
   const t = useTranslate();
-  const navigation = useNavigation();
+  const go = useGo();
 
   const { columns, initialVisibility } = useMemo<BuiltColumnsResult<TRecord>>(
     () => buildColumns<TRecord>(config, t),
@@ -180,12 +180,12 @@ export function useListController<TRecord extends BaseRecord = BaseRecord>(
     onRowClick = (record: TRecord) => {
       if (!record?.id) return;
       // Use overlay-style route so we can implement drawers/modals later.
-      navigation.push(`/r/${config.resource}/show/${record.id}`);
+      go({ to: `/r/${config.resource}/show/${record.id}` });
     };
   } else if (mode === "edit") {
     onRowClick = (record: TRecord) => {
       if (!record?.id) return;
-      navigation.push(`/r/${config.resource}/edit/${record.id}`);
+      go({ to: `/r/${config.resource}/edit/${record.id}` });
     };
   }
 

@@ -1,6 +1,19 @@
 import type { ReactNode } from "react";
 import type { BaseRecord } from "@refinedev/core";
 
+export type ListViewActionsConfig = {
+  /** Show "New" button (create). */
+  create?: boolean;
+  /** Show per-row "View" action. */
+  show?: boolean;
+  /** Show per-row "Edit" action. */
+  edit?: boolean;
+  /** Show per-row "Delete" action. */
+  delete?: boolean;
+  /** Show bulk delete action (when `selectable` is enabled). */
+  bulkDelete?: boolean;
+};
+
 export type ListColumnConfig<TRecord extends BaseRecord = BaseRecord> = {
   /**
    * Field key on the record. Can be a simple path (e.g. "name").
@@ -59,6 +72,9 @@ export type ListRowClickMode = "show" | "edit" | "none";
 export type ListViewConfig<TRecord extends BaseRecord = BaseRecord> = {
   /** Refine resource name (e.g. "users"). Optional when inferred from route. */
   resource?: string;
+
+  /** Control which action buttons are shown (still gated by access control). */
+  actions?: ListViewActionsConfig;
 
   /** Optional i18n key and fallback title for the page header. */
   titleKey?: string;

@@ -7,7 +7,7 @@ const ChecklistListPage = React.lazy(() => import("./pages/list"));
 
 const ChecklistModule: AppModule = {
   name: "checklist",
-  label: "Checklists",
+  label: "checklists.title",
   group: "Inspection Operations",
   priority: 21,
   resource: {

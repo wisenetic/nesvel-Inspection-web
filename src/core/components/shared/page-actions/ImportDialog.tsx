@@ -19,7 +19,8 @@ export const ImportDialog: React.FC<{
   resource?: string;
 }> = ({ open, onOpenChange, resource }) => {
   const notify = useNotification?.();
-  const dataProvider = useDataProvider();
+  const getDataProvider = useDataProvider();
+  const dataProvider = getDataProvider();
 
   const handleFile = (file?: File) => {
     if (!file || !resource) return;

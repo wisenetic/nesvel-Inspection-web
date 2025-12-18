@@ -3,6 +3,8 @@ import type {
   CreateParams,
   CreateResponse,
   DataProvider,
+  DeleteManyParams,
+  DeleteManyResponse,
   DeleteOneParams,
   DeleteOneResponse,
   GetListParams,
@@ -16,6 +18,57 @@ import type {
 const MOCK_LATENCY_MS = 600;
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+type AnyRecord = Record<string, any>;
+
+function storageAvailable() {
+  try {
+    if (typeof window === "undefined") return false;
+    const key = "__ims_mock_test__";
+    window.localStorage.setItem(key, "1");
+    window.localStorage.removeItem(key);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function storeKey(resource: string) {
+  return `ims:mock:${resource}`;
+}
+
+async function loadResourceData<TData extends BaseRecord = BaseRecord>(
+  resource: string,
+): Promise<TData[]> {
+  // Prefer persisted data if available.
+  if (storageAvailable()) {
+    const raw = window.localStorage.getItem(storeKey(resource));
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) return parsed as TData[];
+      } catch {
+        // ignore parse errors and fall back to seed
+      }
+    }
+  }
+
+  // Seed from static JSON.
+  const response = await fetch(`/mocks/${resource}/${resource}.json`);
+  const seed = await response.json();
+  const records: TData[] = Array.isArray(seed) ? (seed as TData[]) : [];
+
+  if (storageAvailable()) {
+    window.localStorage.setItem(storeKey(resource), JSON.stringify(records));
+  }
+
+  return records;
+}
+
+function saveResourceData(resource: string, records: AnyRecord[]) {
+  if (!storageAvailable()) return;
+  window.localStorage.setItem(storeKey(resource), JSON.stringify(records));
+}
 
 /**
  * ENTERPRISE-GRADE MOCK DATA PROVIDER
@@ -34,10 +87,7 @@ export const mockDataProvider: DataProvider = {
 
     const { resource, pagination, sorters, filters } = params as any;
 
-    const response = await fetch(`/mocks/${resource}/${resource}.json`);
-    const rawData = await response.json();
-
-    let records: TData[] = Array.isArray(rawData) ? rawData : [];
+    let records: TData[] = await loadResourceData<TData>(resource);
 
     // Filtering
     if (Array.isArray(filters) && filters.length) {
@@ -105,10 +155,9 @@ export const mockDataProvider: DataProvider = {
 
     const { resource, id } = params as any;
 
-    const response = await fetch(`/mocks/${resource}/${resource}.json`);
-    const data: TData[] = await response.json();
+    const data = await loadResourceData<TData>(resource);
 
-    const record = data.find((r) => r.id == id) as TData;
+    const record = data.find((r: any) => r.id == id) as TData;
 
     return { data: record };
   },
@@ -121,10 +170,16 @@ export const mockDataProvider: DataProvider = {
   ): Promise<CreateResponse<TData>> {
     await sleep(MOCK_LATENCY_MS);
 
-    const { variables } = params as any;
+    const { resource, variables } = params as any;
+
+    const records = await loadResourceData<TData>(resource);
 
     const id = crypto.randomUUID?.() ?? String(Math.random());
     const newRecord = { id, ...(variables as object) } as TData;
+
+    // Add to the front so it appears immediately on page 1.
+    const next = [newRecord as any, ...(records as any[])];
+    saveResourceData(resource, next as any);
 
     return { data: newRecord };
   },
@@ -137,12 +192,25 @@ export const mockDataProvider: DataProvider = {
   ): Promise<UpdateResponse<TData>> {
     await sleep(MOCK_LATENCY_MS);
 
-    const { id, variables } = params as any;
+    const { resource, id, variables } = params as any;
+
+    const records = await loadResourceData<TData>(resource);
+
+    const idx = (records as any[]).findIndex((r) => r?.id == id);
 
     const updatedRecord = {
-      id,
+      ...(idx >= 0 ? (records as any[])[idx] : {}),
       ...(variables as object),
+      id,
     } as TData;
+
+    const next = [...(records as any[])];
+    if (idx >= 0) {
+      next[idx] = updatedRecord as any;
+    } else {
+      next.unshift(updatedRecord as any);
+    }
+    saveResourceData(resource, next as any);
 
     return { data: updatedRecord };
   },
@@ -158,10 +226,37 @@ export const mockDataProvider: DataProvider = {
   ): Promise<DeleteOneResponse<TData>> {
     await sleep(MOCK_LATENCY_MS);
 
-    const { id } = params as any;
+    const { resource, id } = params as any;
+
+    const records = await loadResourceData<TData>(resource);
+    const next = (records as any[]).filter((r) => r?.id != id);
+    saveResourceData(resource, next as any);
 
     return {
       data: { id } as unknown as TData,
+    };
+  },
+
+  // ------------------------------------------
+  // DELETE MANY
+  // ------------------------------------------
+  async deleteMany<
+    TData extends BaseRecord = BaseRecord,
+    TVariables = {},
+  >(
+    params: DeleteManyParams<TVariables>,
+  ): Promise<DeleteManyResponse<TData>> {
+    await sleep(MOCK_LATENCY_MS);
+
+    const { resource, ids } = params as any;
+
+    const records = await loadResourceData<TData>(resource);
+    const idSet = new Set((ids as any[])?.map((x) => String(x)) ?? []);
+    const next = (records as any[]).filter((r) => !idSet.has(String(r?.id)));
+    saveResourceData(resource, next as any);
+
+    return {
+      data: (ids as any[]).map((id) => ({ id }) as unknown as TData),
     };
   },
 
@@ -174,5 +269,5 @@ export const mockDataProvider: DataProvider = {
     return "/mocks";
   },
 
-  // Optional: getMany, updateMany, deleteMany, custom...
+  // Optional: getMany, updateMany, custom...
 };

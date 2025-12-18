@@ -1,3 +1,7 @@
+[data-slot="sidebar-inset"] {
+  overflow-x: auto;
+}
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
