@@ -1,7 +1,13 @@
 import { api } from "@/core/api/axios/axios-instance";
 import { storage } from "@/core/utils/storage";
 import { Token } from "@/core/utils/token";
-import type { LoginPayload, AuthTokens } from "./auth.types";
+import type {
+  AuthTokens,
+  ForgotPasswordPayload,
+  LoginPayload,
+  RegisterPayload,
+  ResetPasswordPayload,
+} from "./auth.types";
 
 const USER_KEY = "auth_user";
 
@@ -27,11 +33,17 @@ export const clearTokens = () => {
  * ------------------------------------------------------------- */
 async function mockLogin(payload: LoginPayload): Promise<AuthTokens> {
   const res = await fetch("/mocks/auth/users.json");
-  const users = await res.json();
+  const users = (await res.json()) as Array<
+    {
+      id: string | number;
+      email: string;
+      password: string;
+      [key: string]: unknown;
+    }
+  >;
 
   const user = users.find(
-    (u: unknown) =>
-      u.email === payload.email && u.password === payload.password,
+    (u) => u.email === payload.email && u.password === payload.password,
   );
 
   if (!user) throw new Error("Invalid credentials");
@@ -121,4 +133,43 @@ export const logout = () => (API_MODE === "mock" ? mockLogout() : apiLogout());
 export const refreshAccessToken = () =>
   API_MODE === "mock" ? mockRefresh() : apiRefresh();
 
-export const getUser = () => storage.get(USER_KEY);
+/* -------------------------------------------------------------
+ * REGISTER / PASSWORD RESET
+ * ------------------------------------------------------------- */
+async function mockRegister(_payload: RegisterPayload) {
+  // In mock mode we don't persist registrations; treat as success.
+  return;
+}
+
+async function apiRegister(payload: RegisterPayload) {
+  await api.post("/auth/register", payload);
+}
+
+export const registerUser = (payload: RegisterPayload) =>
+  API_MODE === "mock" ? mockRegister(payload) : apiRegister(payload);
+
+async function mockForgotPassword(_payload: ForgotPasswordPayload) {
+  // In mock mode we don't send emails; treat as success.
+  return;
+}
+
+async function apiForgotPassword(payload: ForgotPasswordPayload) {
+  await api.post("/auth/forgot-password", payload);
+}
+
+export const requestPasswordReset = (payload: ForgotPasswordPayload) =>
+  API_MODE === "mock" ? mockForgotPassword(payload) : apiForgotPassword(payload);
+
+async function mockResetPassword(_payload: ResetPasswordPayload) {
+  // In mock mode we don't validate the token; treat as success.
+  return;
+}
+
+async function apiResetPassword(payload: ResetPasswordPayload) {
+  await api.post("/auth/reset-password", payload);
+}
+
+export const resetPassword = (payload: ResetPasswordPayload) =>
+  API_MODE === "mock" ? mockResetPassword(payload) : apiResetPassword(payload);
+
+export const getUser = () => storage.get<import("./auth.types").AuthUser>(USER_KEY);

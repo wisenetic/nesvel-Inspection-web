@@ -24,7 +24,7 @@ export const authProvider: AuthProvider = {
     localStorage.removeItem(TOKEN_KEY);
     return {
       success: true,
-      redirectTo: "/login",
+      redirectTo: "/signin",
     };
   },
   check: async () => {
@@ -37,7 +37,7 @@ export const authProvider: AuthProvider = {
 
     return {
       authenticated: false,
-      redirectTo: "/login",
+      redirectTo: "/signin",
     };
   },
   getPermissions: async () => null,

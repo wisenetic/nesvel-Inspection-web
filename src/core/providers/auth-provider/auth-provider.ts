@@ -1,15 +1,89 @@
 // src/core/providers/auth-provider/auth-provider.ts
 import type { AuthProvider } from "@refinedev/core";
 import {
+  getAccessToken,
+  getUser,
   login,
   logout,
   refreshAccessToken,
-  getUser,
-  getAccessToken,
+  registerUser,
+  requestPasswordReset,
+  resetPassword,
 } from "@/core/services/auth";
 import { parseErrorMessage } from "@/core/utils/parse-error";
 
 export const authProvider: AuthProvider = {
+  /**
+   * -------------------------------------------------------------
+   * REGISTER
+   * -------------------------------------------------------------
+   */
+  register: async ({ email, password }) => {
+    try {
+      await registerUser({ email, password });
+
+      return {
+        success: true,
+        redirectTo: "/signin",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: {
+          name: "Register Error",
+          message: parseErrorMessage(error),
+        },
+      };
+    }
+  },
+
+  /**
+   * -------------------------------------------------------------
+   * FORGOT PASSWORD
+   * -------------------------------------------------------------
+   */
+  forgotPassword: async ({ email }) => {
+    try {
+      await requestPasswordReset({ email });
+
+      return {
+        success: true,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: {
+          name: "Forgot Password Error",
+          message: parseErrorMessage(error),
+        },
+      };
+    }
+  },
+
+  /**
+   * -------------------------------------------------------------
+   * UPDATE PASSWORD (reset)
+   * -------------------------------------------------------------
+   */
+  updatePassword: async ({ password, confirmPassword, token }) => {
+    try {
+      await resetPassword({ token, password, confirmPassword });
+
+      return {
+        success: true,
+        redirectTo: "/signin",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: {
+          name: "Update Password Error",
+          message: parseErrorMessage(error),
+        },
+      };
+    }
+  },
+
   /**
    * -------------------------------------------------------------
    * LOGIN
@@ -50,7 +124,7 @@ export const authProvider: AuthProvider = {
 
     return {
       success: true,
-      redirectTo: "/login",
+      redirectTo: "/signin",
     };
   },
 
@@ -75,11 +149,11 @@ export const authProvider: AuthProvider = {
       if (!refreshed) {
         return {
           authenticated: false,
-          redirectTo: "/login",
+          redirectTo: "/signin",
           logout: true,
         };
       }
-      token = refreshed.accessToken;
+      token = refreshed;
     }
 
     return { authenticated: true };
@@ -136,7 +210,7 @@ export const authProvider: AuthProvider = {
     if (status === 401 || status === 403) {
       return {
         logout: true,
-        redirectTo: "/login",
+        redirectTo: "/signin",
       };
     }
 

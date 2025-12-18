@@ -2,7 +2,6 @@
 
 import React from "react";
 import { Outlet } from "react-router";
-import { cn } from "@/core/lib/utils";
 
 import { SidebarWrapper } from "./sidebar/SidebarWrapper";
 import { Header } from "./header/header";
@@ -42,12 +41,12 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
   hideSearch = false,
 }) => {
   return (
-    <SidebarProvider iconWidth="5rem">
+    <SidebarProvider>
       {/* Sidebar (left inset) */}
       <SidebarWrapper />
 
       {/* Main content column */}
-      <SidebarInset>
+      <SidebarInset className={className}>
         {/* HEADER: Application injects custom actions */}
         <Header
           desktopClassName="border-b border-border bg-sidebar"
