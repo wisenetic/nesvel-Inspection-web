@@ -10,7 +10,7 @@ import {
 } from "@refinedev/core";
 import { GalleryVerticalEnd } from "lucide-react";
 
-import { AuthCardLayout, AuthPageLayout } from "@/core/layout";
+import { AuthLayout } from "@/core/layout";
 
 import { InputPassword } from "@/core/components/shared/form/input-password";
 import { Button } from "@/core/components/ui/button";
@@ -53,16 +53,15 @@ export const SignUpPage = () => {
   };
 
   return (
-    <AuthPageLayout>
-      <AuthCardLayout
-        below={
-          <FieldDescription className="px-6 text-center">
-            By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-            and <a href="#">Privacy Policy</a>.
-          </FieldDescription>
-        }
-      >
-        <form className="p-6 md:p-8" onSubmit={handleSignUp}>
+    <AuthLayout
+      below={
+        <FieldDescription className="px-6 text-center">
+          By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
+          and <a href="#">Privacy Policy</a>.
+        </FieldDescription>
+      }
+    >
+      <form className="p-6 md:p-8" onSubmit={handleSignUp}>
           <FieldGroup>
             <div className="flex flex-col items-center gap-2 text-center">
               <a href="#" className="flex items-center gap-2 self-center font-medium">
@@ -128,8 +127,7 @@ export const SignUpPage = () => {
               Already have an account? <Link to="/signin">Sign in</Link>
             </FieldDescription>
           </FieldGroup>
-        </form>
-      </AuthCardLayout>
-    </AuthPageLayout>
+      </form>
+    </AuthLayout>
   );
 };

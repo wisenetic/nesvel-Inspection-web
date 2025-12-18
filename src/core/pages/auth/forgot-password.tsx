@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { useForgotPassword, useLink, useRefineOptions } from "@refinedev/core";
 import { ArrowLeft, GalleryVerticalEnd } from "lucide-react";
 
-import { AuthCardLayout, AuthPageLayout } from "@/core/layout";
+import { AuthLayout } from "@/core/layout";
 
 import { Button } from "@/core/components/ui/button";
 import {
@@ -47,9 +47,8 @@ export const ForgotPasswordPage = () => {
   };
 
   return (
-    <AuthPageLayout>
-      <AuthCardLayout rightClassName="bg-black relative hidden md:block">
-        <form onSubmit={handleForgotPassword} className="p-6 md:p-8">
+    <AuthLayout rightClassName="bg-black relative hidden md:block">
+      <form onSubmit={handleForgotPassword} className="p-6 md:p-8">
           <FieldGroup>
             <div className="flex items-center justify-between">
               <Link
@@ -115,8 +114,7 @@ export const ForgotPasswordPage = () => {
               Remembered your password? <Link to="/signin">Sign in</Link>
             </FieldDescription>
           </FieldGroup>
-        </form>
-      </AuthCardLayout>
-    </AuthPageLayout>
+      </form>
+    </AuthLayout>
   );
 };

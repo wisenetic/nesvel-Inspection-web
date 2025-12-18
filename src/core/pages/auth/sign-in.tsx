@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useLink, useLogin, useRefineOptions } from "@refinedev/core";
 import { GalleryVerticalEnd } from "lucide-react";
 
-import { AuthCardLayout, AuthPageLayout } from "@/core/layout";
+import { AuthLayout } from "@/core/layout";
 
 import { InputPassword } from "@/core/components/shared/form/input-password";
 import { Button } from "@/core/components/ui/button";
@@ -36,17 +36,16 @@ export const SignInPage = () => {
   };
 
   return (
-    <AuthPageLayout>
-      <AuthCardLayout
-        rightClassName="bg-black relative hidden md:block"
-        below={
-          <FieldDescription className="px-6 text-center">
-            By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-            and <a href="#">Privacy Policy</a>.
-          </FieldDescription>
-        }
-      >
-        <form onSubmit={handleSignIn} className="p-6 md:p-8">
+    <AuthLayout
+      rightClassName="bg-black relative hidden md:block"
+      below={
+        <FieldDescription className="px-6 text-center">
+          By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
+          and <a href="#">Privacy Policy</a>.
+        </FieldDescription>
+      }
+    >
+      <form onSubmit={handleSignIn} className="p-6 md:p-8">
           <FieldGroup>
             <div className="flex flex-col items-center gap-2 text-center">
               <a href="#" className="flex items-center gap-2 self-center font-medium">
@@ -100,8 +99,7 @@ export const SignInPage = () => {
               Don&apos;t have an account? <Link to="/signup">Sign up</Link>
             </FieldDescription>
           </FieldGroup>
-        </form>
-      </AuthCardLayout>
-    </AuthPageLayout>
+      </form>
+    </AuthLayout>
   );
 };

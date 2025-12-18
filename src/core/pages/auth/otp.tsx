@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 import { useLink, useNotification, useRefineOptions } from "@refinedev/core";
 import { GalleryVerticalEnd } from "lucide-react";
 
-import { AuthCardLayout, AuthPageLayout } from "@/core/layout";
+import { AuthLayout } from "@/core/layout";
 
 import { Button } from "@/core/components/ui/button";
 import {
@@ -56,9 +56,8 @@ export const OtpPage = () => {
   };
 
   return (
-    <AuthPageLayout>
-      <AuthCardLayout>
-        <form onSubmit={handleVerify} className="p-6 md:p-8">
+    <AuthLayout>
+      <form onSubmit={handleVerify} className="p-6 md:p-8">
           <FieldGroup>
             <div className="flex flex-col items-center gap-2 text-center">
               <a href="#" className="flex items-center gap-2 self-center font-medium">
@@ -137,8 +136,7 @@ export const OtpPage = () => {
               </Link>
             </Field>
           </FieldGroup>
-        </form>
-      </AuthCardLayout>
-    </AuthPageLayout>
+      </form>
+    </AuthLayout>
   );
 };

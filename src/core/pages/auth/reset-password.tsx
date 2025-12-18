@@ -11,7 +11,7 @@ import {
 } from "@refinedev/core";
 import { GalleryVerticalEnd } from "lucide-react";
 
-import { AuthCardLayout, AuthPageLayout } from "@/core/layout";
+import { AuthLayout } from "@/core/layout";
 
 import { InputPassword } from "@/core/components/shared/form/input-password";
 import { Button } from "@/core/components/ui/button";
@@ -77,9 +77,8 @@ export const ResetPasswordPage = () => {
   };
 
   return (
-    <AuthPageLayout>
-      <AuthCardLayout>
-        <form onSubmit={handleResetPassword} className="p-6 md:p-8">
+    <AuthLayout>
+      <form onSubmit={handleResetPassword} className="p-6 md:p-8">
           <FieldGroup>
             <div className="flex flex-col items-center gap-2 text-center">
               <a href="#" className="flex items-center gap-2 self-center font-medium">
@@ -132,8 +131,7 @@ export const ResetPasswordPage = () => {
               </Field>
             )}
           </FieldGroup>
-        </form>
-      </AuthCardLayout>
-    </AuthPageLayout>
+      </form>
+    </AuthLayout>
   );
 };
